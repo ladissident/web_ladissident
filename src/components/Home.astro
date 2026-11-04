@@ -277,50 +277,47 @@ const vimeoId = vimeoVideos[locale];
 
 
 
+
 const share = document.querySelector<HTMLButtonElement>('[data-share]');
 const shareStatus = document.querySelector<HTMLElement>('.share-status');
 
+let sharing = false;
+
 share?.addEventListener('click', async () => {
+  if (sharing) return;
+
   const url = window.location.href.split('#')[0];
-  const title = document.title;
+  const isSpanish = window.location.pathname.startsWith('/es/');
 
   if (shareStatus) shareStatus.textContent = '';
 
-  const isSpanish = window.location.pathname.startsWith('/es/');
-
-  // Compartir amb el menú natiu del dispositiu
   if (typeof navigator.share === 'function') {
+    sharing = true;
+
     try {
       await navigator.share({
-        title: title,
-        url: url
+        title: document.title,
+        url
       });
-
     } catch (error) {
-      console.error('Error en compartir:', error);
-if (shareStatus) {
-  shareStatus.textContent =
-    `Error: ${(error as Error).name} - ${(error as Error).message}`;
-}
+      const shareError = error as Error;
 
-return;
+      if (shareError.name !== 'AbortError') {
+        console.error('Error al compartir:', shareError);
 
-      if ((error as Error).name === 'AbortError') {
-        return;
+        if (shareStatus) {
+          shareStatus.textContent = isSpanish
+            ? 'No se ha podido abrir el menú para compartir.'
+            : 'No s’ha pogut obrir el menú per a compartir.';
+        }
       }
-
-      // No copiem automàticament si falla el menú
-      if (shareStatus) {
-        shareStatus.textContent = isSpanish
-          ? 'No se ha podido abrir el menú. Inténtalo de nuevo.'
-          : 'No s’ha pogut obrir el menú. Torna-ho a intentar.';
-      }
+    } finally {
+      sharing = false;
     }
 
     return;
   }
 
-  // Només si el navegador no disposa de navigator.share
   try {
     await navigator.clipboard.writeText(url);
 
@@ -329,14 +326,11 @@ return;
         ? '¡Enlace copiado!'
         : 'Enllaç copiat!';
     }
-  } catch (error) {
-    console.error('Error en copiar:', error);
-
-    if (shareStatus) {
-      shareStatus.textContent = url;
-    }
+  } catch {
+    if (shareStatus) shareStatus.textContent = url;
   }
 });
+
 
 
   </script>
