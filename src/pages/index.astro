@@ -1,3 +1,9 @@
 ---
 ---
-<meta http-equiv="refresh" content="0;url=/ca/"/><a href="/ca/">La Dissident</a>
+---
+const base = import.meta.env.BASE_URL;
+const destination = `${base}ca/`;
+---
+
+<meta http-equiv="refresh" content={`0;url=${destination}`} />
+<a href={destination}>La Dissident</a>
