@@ -276,6 +276,7 @@ const vimeoId = vimeoVideos[locale];
     }
 
 
+
 const share = document.querySelector<HTMLButtonElement>('[data-share]');
 const shareStatus = document.querySelector<HTMLElement>('.share-status');
 
@@ -285,44 +286,53 @@ share?.addEventListener('click', async () => {
 
   if (shareStatus) shareStatus.textContent = '';
 
-  // Primer intentem obrir sempre el menú natiu del mòbil.
+  const isSpanish = window.location.pathname.startsWith('/es/');
+
+  // Compartir amb el menú natiu del dispositiu
   if (typeof navigator.share === 'function') {
     try {
       await navigator.share({
-        title,
-        text: title,
-        url
+        title: title,
+        url: url
       });
 
-      return;
     } catch (error) {
-      // Si la persona cancel·la, no fem res.
+      console.error('Error en compartir:', error);
+
+      // Si l'usuari tanca el menú, no mostrem cap error
       if ((error as Error).name === 'AbortError') {
         return;
       }
 
-      // Altres errors: mostrem una alternativa manual.
-      console.warn('No s’ha pogut compartir:', error);
+      // No copiem automàticament si falla el menú
+      if (shareStatus) {
+        shareStatus.textContent = isSpanish
+          ? 'No se ha podido abrir el menú. Inténtalo de nuevo.'
+          : 'No s’ha pogut obrir el menú. Torna-ho a intentar.';
+      }
     }
+
+    return;
   }
 
-  // Alternativa: copiar l'enllaç.
+  // Només si el navegador no disposa de navigator.share
   try {
     await navigator.clipboard.writeText(url);
 
     if (shareStatus) {
-  shareStatus.textContent =
-  window.location.pathname.startsWith('/es/')
-    ? 'Enlace copiado. ¡Gracias!'
-    : 'Enllaç copiat. Gràcies!';
+      shareStatus.textContent = isSpanish
+        ? '¡Enlace copiado!'
+        : 'Enllaç copiat!';
     }
-  } catch {
-    // Últim recurs quan el navegador no permet copiar.
+  } catch (error) {
+    console.error('Error en copiar:', error);
+
     if (shareStatus) {
       shareStatus.textContent = url;
     }
   }
 });
+
 
   </script>
 </Base>
