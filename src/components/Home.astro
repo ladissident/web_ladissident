@@ -298,8 +298,13 @@ share?.addEventListener('click', async () => {
 
     } catch (error) {
       console.error('Error en compartir:', error);
+if (shareStatus) {
+  shareStatus.textContent =
+    `Error: ${(error as Error).name} - ${(error as Error).message}`;
+}
 
-      // Si l'usuari tanca el menú, no mostrem cap error
+return;
+
       if ((error as Error).name === 'AbortError') {
         return;
       }
