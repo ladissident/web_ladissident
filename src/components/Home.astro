@@ -107,8 +107,15 @@ const vimeoId = vimeoVideos[locale];
                 <input class="amount-input" name="amount" type="number" min="0.01" step="0.01" value="25" required aria-label={t.amount}/>
               </fieldset>
               <p class="muted cup-hint">{t.cupHint}</p>
-              <fieldset class="cup-field inset-panel" hidden>
-                <legend>{t.cupTitle}</legend>
+
+		<fieldset
+		  class="cup-field inset-panel"
+		  aria-labelledby="cup-heading"
+		  hidden
+		>
+		  <div id="cup-heading" class="cup-heading">
+		    {t.cupTitle}
+		  </div>
                 <label class="check"><input name="cup" type="radio" value="yes"/><span>{t.cupYes}</span></label>
                 <label class="check"><input name="cup" type="radio" value="no" checked/><span>{t.cupNo}</span></label>
                 <div class="delivery-fields" hidden>
@@ -268,16 +275,54 @@ const vimeoId = vimeoVideos[locale];
       updateCup();
     }
 
-    const share = document.querySelector<HTMLButtonElement>('[data-share]');
-    share?.addEventListener('click', async () => {
-      const url = location.href.split('#')[0];
-      const title = document.title;
-      try {
-        if (navigator.share) await navigator.share({title, text:title, url});
-        else { await navigator.clipboard.writeText(`${title} ${url}`); const s=document.querySelector('.share-status'); if(s) s.textContent=share.dataset.copy||''; }
-      } catch (error) {
-        if ((error as Error).name !== 'AbortError') { const s=document.querySelector('.share-status'); if(s) s.textContent=url; }
+
+const share = document.querySelector<HTMLButtonElement>('[data-share]');
+const shareStatus = document.querySelector<HTMLElement>('.share-status');
+
+share?.addEventListener('click', async () => {
+  const url = window.location.href.split('#')[0];
+  const title = document.title;
+
+  if (shareStatus) shareStatus.textContent = '';
+
+  // Primer intentem obrir sempre el menú natiu del mòbil.
+  if (typeof navigator.share === 'function') {
+    try {
+      await navigator.share({
+        title,
+        text: title,
+        url
+      });
+
+      return;
+    } catch (error) {
+      // Si la persona cancel·la, no fem res.
+      if ((error as Error).name === 'AbortError') {
+        return;
       }
-    });
+
+      // Altres errors: mostrem una alternativa manual.
+      console.warn('No s’ha pogut compartir:', error);
+    }
+  }
+
+  // Alternativa: copiar l'enllaç.
+  try {
+    await navigator.clipboard.writeText(url);
+
+    if (shareStatus) {
+  shareStatus.textContent =
+  window.location.pathname.startsWith('/es/')
+    ? 'Enlace copiado. ¡Gracias!'
+    : 'Enllaç copiat. Gràcies!';
+    }
+  } catch {
+    // Últim recurs quan el navegador no permet copiar.
+    if (shareStatus) {
+      shareStatus.textContent = url;
+    }
+  }
+});
+
   </script>
 </Base>
