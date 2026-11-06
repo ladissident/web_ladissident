@@ -275,75 +275,52 @@ const vimeoId = vimeoVideos[locale];
       updateCup();
     }
 
-
-
-
 const share = document.querySelector<HTMLButtonElement>('[data-share]');
 const shareStatus = document.querySelector<HTMLElement>('.share-status');
 
-let sharing = false;
-
 share?.addEventListener('click', async () => {
-  if (sharing) return;
-
   const url = window.location.href.split('#')[0];
-  const isSpanish = window.location.pathname.startsWith('/es/');
+  const title = document.title;
 
   if (shareStatus) shareStatus.textContent = '';
 
+  // Primer intentem obrir sempre el menú natiu del mòbil.
   if (typeof navigator.share === 'function') {
-    sharing = true;
-
     try {
       await navigator.share({
-        title: document.title,
+        title,
+        text: title,
         url
       });
+
+      return;
     } catch (error) {
-  const shareError = error as Error;
+      // Si la persona cancel·la, no fem res.
+      if ((error as Error).name === 'AbortError') {
+        return;
+      }
 
-  // Si la persona cancel·la, no fem res
-  if (shareError.name === 'AbortError') {
-    return;
+      // Altres errors: mostrem una alternativa manual.
+      console.warn('No s’ha pogut compartir:', error);
+    }
   }
 
-  // Si Firefox o un altre navegador falla,
-  // copiem l'enllaç com a alternativa
+  // Alternativa: copiar l'enllaç.
   try {
     await navigator.clipboard.writeText(url);
 
     if (shareStatus) {
-      shareStatus.textContent = isSpanish
-        ? 'No se ha podido abrir el menú. ¡Enlace copiado!'
-        : 'No s’ha pogut obrir el menú. Enllaç copiat!';
+      shareStatus.textContent = share.dataset.copy || 'Enllaç copiat!';
     }
   } catch {
+    // Últim recurs quan el navegador no permet copiar.
     if (shareStatus) {
-      shareStatus.textContent = isSpanish
-        ? 'No se ha podido compartir. Copia este enlace: ' + url
-        : 'No s’ha pogut compartir. Copia aquest enllaç: ' + url;
+      shareStatus.textContent = url;
     }
   }
-} finally {
-      sharing = false;
-    }
+});
 
-    return;
-  }
 
-  try {
-    await navigator.clipboard.writeText(url);
-
-    if (shareStatus) {
-      shareStatus.textContent = isSpanish
-        ? '¡Enlace copiado!'
-        : 'Enllaç copiat!';
-    }
-  } catch {
-    if (shareStatus) shareStatus.textContent = url;
-  }
-}
-);
 
 
 
