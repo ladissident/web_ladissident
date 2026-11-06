@@ -6,7 +6,7 @@ const locale = lang === 'es' ? 'es' : 'ca';
 const t = content[locale];
 const money = (n:number) => new Intl.NumberFormat(locale === 'ca' ? 'ca-ES' : 'es-ES', { style:'currency', currency:'EUR', maximumFractionDigits:0 }).format(n);
 const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
-const vimeoId = vimeoVideos[locale];
+
 ---
 <Base lang={locale} title={`La Dissident · ${t.headline}`} description={t.headline}>
   <header class="site-header">
@@ -42,7 +42,7 @@ const vimeoId = vimeoVideos[locale];
         <p class="hero-subtitle">{t.subtitle}</p>
         <div class="actions">
           <a class="btn" href="#participa">{t.participate}</a>
-          <a class="btn btn-outline" href="#video">{t.watch}</a>
+          <a class="btn btn-outline" href="#video-section">{t.watch}</a>
         </div>
         <div class="progress-card">
           <div class="progress-labels"><strong>{money(campaign.demoRaised)} {t.achieved}</strong><strong>{percent}%</strong></div>
@@ -57,10 +57,60 @@ const vimeoId = vimeoVideos[locale];
     <section class="section" id="projecte">
       <div class="container split" id="video">
         <div><p class="eyebrow">{t.videoHeading}</p><h2>{t.aboutTitle}</h2><p>{t.about}</p></div>
-        <div class="video-frame">
-          {vimeoId ? <iframe src={`https://player.vimeo.com/video/${encodeURIComponent(vimeoId)}`} title={t.videoHeading} allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe> :
-            <div class="video-placeholder"><span class="play-icon" aria-hidden="true">▶</span><p>{t.videoPlaceholder}</p></div>}
-        </div>
+
+<div
+  id="video-section"
+  class="video-player"
+  data-vimeo-player
+  data-ca={vimeoVideos.ca}
+  data-es={vimeoVideos.es}
+>
+  <!-- Selector d'idioma -->
+  <div class="video-language" role="group" aria-label="Idioma del vídeo">
+    <button
+      type="button"
+      class="video-lang-btn"
+      data-video-lang="ca"
+      aria-pressed={locale === 'ca'}
+    >
+      Valencià
+    </button>
+
+    <button
+      type="button"
+      class="video-lang-btn"
+      data-video-lang="es"
+      aria-pressed={locale === 'es'}
+    >
+      Castellano
+    </button>
+  </div>
+
+  <!-- Reproductor -->
+  <div class="video-frame">
+    <iframe
+      data-vimeo-iframe
+      src={vimeoVideos[locale] || undefined}
+      title={locale === 'ca'
+        ? 'Vídeo de La Dissident'
+        : 'Vídeo de La Dissident'}
+      loading="lazy"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      hidden={!vimeoVideos[locale]}
+    ></iframe>
+
+    <div
+      class="video-placeholder"
+      data-video-placeholder
+      hidden={Boolean(vimeoVideos[locale])}
+    >
+      <span class="play-icon" aria-hidden="true">▶</span>
+      <p>{t.videoPlaceholder}</p>
+    </div>
+  </div>
+</div>
+
       </div>
     </section>
 
@@ -321,7 +371,73 @@ share?.addEventListener('click', async () => {
 });
 
 
+// Selector dels vídeos de Vimeo
+const videoPlayer = document.querySelector<HTMLElement>(
+  '[data-vimeo-player]'
+);
 
+if (videoPlayer) {
+  const iframe = videoPlayer.querySelector<HTMLIFrameElement>(
+    '[data-vimeo-iframe]'
+  );
+
+  const placeholder = videoPlayer.querySelector<HTMLElement>(
+    '[data-video-placeholder]'
+  );
+
+  const languageButtons = videoPlayer.querySelectorAll<HTMLButtonElement>(
+    '[data-video-lang]'
+  );
+
+  const videoUrls: Record<string, string> = {
+    ca: videoPlayer.dataset.ca || '',
+    es: videoPlayer.dataset.es || ''
+  };
+
+  function changeVideo(language: string) {
+    const url = videoUrls[language];
+
+    languageButtons.forEach(button => {
+      button.setAttribute(
+        'aria-pressed',
+        String(button.dataset.videoLang === language)
+      );
+    });
+
+    if (!iframe || !placeholder) return;
+
+    // Canviar src també deté la reproducció anterior.
+    iframe.removeAttribute('src');
+
+    if (url) {
+      iframe.src = url;
+      iframe.hidden = false;
+      placeholder.hidden = true;
+    } else {
+      iframe.hidden = true;
+      placeholder.hidden = false;
+
+      const message = placeholder.querySelector('p');
+      if (message) {
+        message.textContent = language === 'ca'
+          ? 'Vídeo en valencià pendent de configurar'
+          : 'Vídeo en castellà pendent de configurar';
+      }
+    }
+  }
+
+  languageButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const language = button.dataset.videoLang;
+      if (!language) return;
+
+      // Evitar recarregar un vídeo ja seleccionat
+      if (button.getAttribute('aria-pressed') === 'true') return;
+
+      changeVideo(language);
+    });
+  });
+}
 
 
   </script>

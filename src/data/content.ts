@@ -1,12 +1,15 @@
 /** Continguts visibles. Mantén les claus de CA i ES equivalents. */
 export const campaign = { goal: 115000, deadline: '2027-01-31', demoRaised: 49450, demoUpdated: '2026-11-04' };
 /** Deixa buit el valor fins que tingues l'ID numèric de cada vídeo de Vimeo. */
-export const vimeoVideos: Record<'ca'|'es',string> = { ca: '', es: '' };
+export const vimeoVideos: Record<'ca' | 'es', string> = {
+  ca: 'https://player.vimeo.com/video/1244181209?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0', 
+  es: 'https://player.vimeo.com/video/1244160201?h=bb26ba305d&title=0&byline=0&portrait=0'  
+};
 
 export const content = {
   ca: {
     navAbout:'Sobre el projecte', navFaq:'Preguntes', participate:'Participa', watch:'Veure el vídeo',
-    headline:'Traure una casa del mercat. Posar-la al servei de la comunitat.',
+    headline:'Traure una casa del mercat. Posar-la al servei de la comunitat. v01',
     subtitle:'Objectiu: aconseguir 115.000 € abans del 31 de gener de 2027',
     achieved:'aconseguits', missing:'pendents', updated:'Actualitzat el',
     videoHeading:'Coneix La Dissident', aboutTitle:'La Dissident ja existeix',

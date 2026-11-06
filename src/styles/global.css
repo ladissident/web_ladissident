@@ -272,4 +272,69 @@ html {scroll-padding-top:100px}
   margin-bottom: 18px;
 }
 
+/* Reproductor Vimeo */
 
+.video-player {
+  width: 100%;
+}
+
+/* Selector d'idioma */
+.video-language {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.video-lang-btn {
+  background: transparent;
+  color: #3B2A22;
+  border: 1px solid #D8C4A8;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Idioma seleccionat */
+.video-lang-btn[aria-pressed="true"] {
+  background: #647052;
+  border-color: #647052;
+  color: #FFF9F0;
+}
+
+.video-lang-btn:hover {
+  border-color: #647052;
+}
+
+/* Vídeo responsive */
+.video-player .video-frame {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #3B2A22;
+}
+
+.video-player .video-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Respectar els elements ocults */
+.video-player [hidden] {
+  display: none !important;
+}
+
+@media (max-width: 650px) {
+  .video-language {
+    justify-content: center;
+  }
+
+  .video-lang-btn {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+}
