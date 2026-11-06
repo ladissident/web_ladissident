@@ -300,18 +300,31 @@ share?.addEventListener('click', async () => {
         url
       });
     } catch (error) {
-      const shareError = error as Error;
+  const shareError = error as Error;
 
-      if (shareError.name !== 'AbortError') {
-        console.error('Error al compartir:', shareError);
+  // Si la persona cancel·la, no fem res
+  if (shareError.name === 'AbortError') {
+    return;
+  }
 
-        if (shareStatus) {
-          shareStatus.textContent = isSpanish
-            ? 'No se ha podido abrir el menú para compartir.'
-            : 'No s’ha pogut obrir el menú per a compartir.';
-        }
-      }
-    } finally {
+  // Si Firefox o un altre navegador falla,
+  // copiem l'enllaç com a alternativa
+  try {
+    await navigator.clipboard.writeText(url);
+
+    if (shareStatus) {
+      shareStatus.textContent = isSpanish
+        ? 'No se ha podido abrir el menú. ¡Enlace copiado!'
+        : 'No s’ha pogut obrir el menú. Enllaç copiat!';
+    }
+  } catch {
+    if (shareStatus) {
+      shareStatus.textContent = isSpanish
+        ? 'No se ha podido compartir. Copia este enlace: ' + url
+        : 'No s’ha pogut compartir. Copia aquest enllaç: ' + url;
+    }
+  }
+} finally {
       sharing = false;
     }
 
@@ -329,7 +342,8 @@ share?.addEventListener('click', async () => {
   } catch {
     if (shareStatus) shareStatus.textContent = url;
   }
-});
+}
+);
 
 
 
