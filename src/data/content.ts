@@ -2,8 +2,8 @@
 export const campaign = { goal: 115000, deadline: '2027-01-31', demoRaised: 49450, demoUpdated: '2026-11-04' };
 /** Deixa buit el valor fins que tingues l'ID numèric de cada vídeo de Vimeo. */
 export const vimeoVideos: Record<'ca' | 'es', string> = {
-  ca: 'https://player.vimeo.com/video/1244181209?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0', 
-  es: 'https://player.vimeo.com/video/1244160201?h=bb26ba305d&title=0&byline=0&portrait=0'  
+  ca: 'https://player.vimeo.com/video/1244181209?badge=0&autopause=0&title=0&byline=0&portrait=0&fullscreen=1&playsinline=1',
+  es: 'https://player.vimeo.com/video/1244160201?h=bb26ba305d&title=0&byline=0&portrait=0&fullscreen=1&playsinline=1'
 };
 
 export const content = {
