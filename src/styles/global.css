@@ -362,3 +362,25 @@ html {scroll-padding-top:100px}
 .finance-form [hidden], .donation-information [hidden] { display: none !important; }
 .bank-panel [data-copy-iban]:disabled { opacity: .5; cursor:not-allowed; }
 @media(max-width: 780px){.finance-choices{grid-template-columns:1fr;} .finance-branch,.finance-explainer,.bank-panel,.cup-mail-panel{padding:16px;}}
+
+/* Explicació "T'ajudem a triar" sense requadre */
+.finance-form .finance-branch-plain {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 24px 0;
+}
+
+/* Revisió formulari: preferències de l'opció indecisa en el mateix bloc de dades */
+.finance-form .finance-shared-preferences {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 16px 0 20px;
+}
+.finance-form .finance-branch-plain { margin-bottom: 14px; }
+.finance-form .finance-branch-plain p { margin-bottom: 0; }
+.finance-explain-item .finance-comparison { padding: 6px 16px 18px; }
+.finance-explain-item .finance-comparison h4 { margin: 8px 0 12px; }

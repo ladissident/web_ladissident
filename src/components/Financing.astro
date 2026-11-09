@@ -55,7 +55,11 @@ const explanation = ca ? [
       <div class="finance-explainer inset-panel" data-finance-explainer hidden>
         <h3>{L('Tria com vols donar suport a la campanya','Elige cómo quieres apoyar la campaña')}</h3>
         <p>{L('A més de les aportacions a fons perdut i la difusió, pots ajudar amb finançament que es retornarà. Les dues modalitats tenen responsables i condicions diferents. Llig l’explicació abans de decidir.','Además de las aportaciones a fondo perdido y la difusión, puedes ayudar mediante financiación que será devuelta. Ambas modalidades tienen responsables y condiciones diferentes. Lee la explicación antes de decidir.')}</p>
-        {explanation.map(item => <details class="faq-item finance-explain-item"><summary>{item.title}</summary>{item.paragraphs.map(paragraph=><p>{paragraph}</p>)}</details>)}
+        {explanation.map((item, index) => (
+          <details class="faq-item finance-explain-item">
+            <summary>{item.title}</summary>
+            {item.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+            {index === 2 && (
         <div class="finance-comparison"><h4>{L('Comparació ràpida','Comparación rápida')}</h4>
           <div class="finance-table-scroll"><table><thead><tr><th>{L('Aspecte','Aspecto')}</th><th>{L('Préstec personal','Préstamo personal')}</th><th>{L('Persona associada','Persona asociada')}</th></tr></thead><tbody>
           <tr><th>{L('Rep els diners','Recibe el dinero')}</th><td>V. Andrés Bertí</td><td>La Dissident</td></tr>
@@ -66,6 +70,16 @@ const explanation = ca ? [
           <tr><th>{L('Garantia de l’immoble','Garantía del inmueble')}</th><td>{L('No','No')}</td><td>{L('No','No')}</td></tr>
           </tbody></table></div>
         </div>
+            )}
+          </details>
+        ))}
+      </div>
+      <div class="finance-branch finance-branch-plain" data-finance-branch="undecided" hidden>
+        <h3>{L('T’ajudem a triar','Te ayudamos a elegir')}</h3>
+        <p>{L(
+          'Si encara no tens clar quina modalitat triar, vols més informació o prefereixes una atenció individualitzada, emplena el formulari següent. Indica’ns les teues preferències i ens posarem en contacte amb tu per explicar-te les opcions i preparar una comparació adaptada. No et compromet a aportar diners.',
+          'Si todavía no tienes claro qué modalidad elegir, quieres más información o prefieres una atención individualizada, rellena el siguiente formulario. Indícanos tus preferencias y nos pondremos en contacto contigo para explicarte las opciones y preparar una comparación adaptada. No te compromete a aportar dinero.'
+        )}</p>
       </div>
       <div class="finance-common" data-finance-common hidden>
         <div class="two-cols"><label>{L('Nom i cognoms','Nombre y apellidos')}<input name="fullName" autocomplete="name" required disabled/></label><label>{L('Correu electrònic','Correo electrónico')}<input name="email" type="email" autocomplete="email" required disabled/></label></div>
@@ -88,9 +102,7 @@ const explanation = ca ? [
           <label>{L('Preferència de reembossament','Preferencia de reembolso')}<select name="memberFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="maturity">{L('Al venciment','Al vencimiento')}</option><option value="flexible">{L('Flexible segons liquiditat','Flexible según liquidez')}</option></select></label></div>
           <label>{L('Necessites prioritat?','¿Necesitas prioridad?')}<select name="memberPriority" disabled><option value="short">{L('Necessite un termini curt','Necesito un plazo corto')}</option><option value="medium">{L('Puc acceptar un termini intermedi','Puedo aceptar un plazo intermedio')}</option><option value="long">{L('Puc acceptar una permanència llarga','Puedo aceptar una permanencia larga')}</option><option value="explain">{L('Vull explicar-ho','Quiero explicarlo')}</option></select></label>
         </div>
-        <div class="finance-branch inset-panel" data-finance-branch="undecided" hidden><h3>{L('T’ajudem a triar','Te ayudamos a elegir')}</h3><p>{L('No cal decidir ara. Amb aquestes preferències la cooperativa podrà preparar-te una comparació individualitzada.','No tienes que decidir ahora. Con estas preferencias la cooperativa podrá prepararte una comparación individualizada.')}</p></div>
-        <div class="finance-shared-preferences inset-panel" data-shared-preferences hidden>
-          <h3>{L('Les teues necessitats','Tus necesidades')}</h3>
+        <div class="finance-shared-preferences" data-shared-preferences hidden>
           <div class="two-cols"><label>{L('Quan necessitaries començar a recuperar els diners?','¿Cuándo necesitarías empezar a recuperar el dinero?')}<select name="needStart" disabled><option value="2months">{L('Després de 2 mesos','Después de 2 meses')}</option><option value="1year">{L('Després d’1 any','Después de 1 año')}</option><option value="later">{L('Puc esperar més','Puedo esperar más')}</option><option value="unsure">{L('No ho sé','No lo sé')}</option></select></label><label>{L('Termini preferit de devolució','Plazo preferido de devolución')}<select name="preferredYears" disabled>{['1','2','3','5','7','10'].map(n=><option value={n}>{n} {L('anys','años')}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
           <div class="two-cols"><label>{L('Carència voluntària acceptable','Carencia voluntaria aceptable')}<select name="preferredGrace" disabled><option value="none">{L('No','No')}</option><option value="6">{L('Fins a 6 mesos','Hasta 6 meses')}</option><option value="12">{L('Fins a 12 mesos','Hasta 12 meses')}</option><option value="24">{L('Fins a 24 mesos','Hasta 24 meses')}</option><option value="more">{L('Més temps','Más tiempo')}</option></select></label><label>{L('Periodicitat preferida','Periodicidad preferida')}<select name="preferredFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="semiannual">{L('Semestral','Semestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
         </div>
