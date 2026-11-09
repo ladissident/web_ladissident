@@ -384,3 +384,42 @@ html {scroll-padding-top:100px}
 .finance-form .finance-branch-plain p { margin-bottom: 0; }
 .finance-explain-item .finance-comparison { padding: 6px 16px 18px; }
 .finance-explain-item .finance-comparison h4 { margin: 8px 0 12px; }
+
+/* Corregir desbordament de la taula en mòbil */
+@media (max-width: 780px) {
+
+  .forms-container,
+  .form-accordion,
+  .form-inside,
+  .finance-form,
+  .finance-explainer,
+  .finance-explain-item,
+  .finance-comparison {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Només la taula pot desplaçar-se horitzontalment */
+  .finance-table-scroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .finance-comparison table {
+    width: 100%;
+    min-width: 520px;
+  }
+
+  /* Evitar que les cel·les es comprimisquen massa */
+  .finance-comparison th,
+  .finance-comparison td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+}
