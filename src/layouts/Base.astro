@@ -2,4 +2,7 @@
 import '../styles/global.css';
 const { lang='ca', title='La Dissident', description='Una casa al servei de la comunitat' } = Astro.props;
 ---
-<!doctype html><html lang={lang}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#F4EDDF"/><link rel="canonical" href={`https://www.ladissident.org/${lang}/`}/><title>{title}</title><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:url" content={`https://www.ladissident.org/${lang}/`}/><link rel="alternate" hreflang="ca" href="https://www.ladissident.org/ca/"/><link rel="alternate" hreflang="es" href="https://www.ladissident.org/es/"/></head><body><slot/></body></html>
+<!doctype html><html lang={lang}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#F4EDDF"/><link rel="canonical" href={`https://www.ladissident.org/${lang}/`}/><title>{title}</title><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:url" content={`https://www.ladissident.org/${lang}/`}/>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="alternate" hreflang="ca" href="https://www.ladissident.org/ca/"/>
+<link rel="alternate" hreflang="es" href="https://www.ladissident.org/es/"/></head><body><slot/></body></html>

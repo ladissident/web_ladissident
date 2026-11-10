@@ -252,8 +252,11 @@ const explanation = ca ? [
       if (target.name === 'financeMode') financeForm.querySelector('.finance-mode-field')?.classList.remove('finance-group-invalid');
       clearSummary();
     });
+    // Tornar a l'inici només quan es tanca la confirmació, no abans.
+    const returnToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     closeDialog?.addEventListener('click', () => dialog?.close());
     dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog?.addEventListener('close', returnToTop);
 
     financeForm.addEventListener('submit', async event => {
       event.preventDefault();
@@ -310,7 +313,10 @@ const explanation = ca ? [
         if (formAccordion) formAccordion.open = false;
         if (location.hash === '#form-financament') history.replaceState(null, '', location.pathname + location.search);
         if (dialog?.showModal) dialog.showModal();
-        else alert(es ? 'Solicitud enviada con éxito. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : 'Sol·licitud enviada amb èxit. Ens posarem en contacte amb tu. No faces cap transferència.');
+        else {
+          alert(es ? 'Solicitud enviada con éxito. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : 'Sol·licitud enviada amb èxit. Ens posarem en contacte amb tu. No faces cap transferència.');
+          returnToTop();
+        }
       } catch {
         showSummary(es ? 'No se ha podido conectar con el servidor. Inténtalo de nuevo.' : 'No s’ha pogut connectar amb el servidor. Torna-ho a intentar.');
       } finally {
