@@ -7,6 +7,7 @@ import { onRequestPost } from '../functions/api/financing';
 interface Env {
   DB: D1Database;
   TURNSTILE_SECRET_KEY: string;
+  RESEND_API_KEY?: string;
   FINANCING_RATE_LIMITER: { limit(options: { key: string }): Promise<{ success: boolean }> };
   ASSETS: { fetch(request: Request): Promise<Response> };
 }

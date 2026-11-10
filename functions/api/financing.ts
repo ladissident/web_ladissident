@@ -1,4 +1,5 @@
-interface Env { DB: D1Database; TURNSTILE_SECRET_KEY: string; }
+import { sendFinancingNotification } from './notification';
+interface Env { DB: D1Database; TURNSTILE_SECRET_KEY: string; RESEND_API_KEY?: string; }
 type Context = { request: Request; env: Env };
 const allowed = {
   loan: { loanRemuneration:['zero','ipc','both'], loanYears:['1','2','3','5','7','10','none','discuss'], loanFrequency:['monthly','quarterly','semiannual','annual','none'], loanGrace:['2','6','12','24','more','discuss'], loanFlexibility:['fixed','early','small','flexible','discuss'] },
@@ -41,9 +42,36 @@ export async function onRequestPost({request,env}:Context):Promise<Response>{
   }
   const id=crypto.randomUUID();
   const code='LD-'+id.slice(0,8).toUpperCase();
+  const createdAt = new Date().toISOString();
+  const newsletter = bool(obj.newsletter);
   try{
-    await env.DB.prepare(`INSERT INTO financing_requests (id,code,mode,full_name,email,phone,locality,preferred_language,amount_eur,preferences_json,comment,newsletter_consent,notice_acknowledged,transfer_acknowledged) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,1,1)`)
-      .bind(id,code,mode,fullName,email,phone||null,locality||null,lang,amount,JSON.stringify(prefs),comment||null,bool(obj.newsletter)?1:0).run();
+    await env.DB.prepare(`INSERT INTO financing_requests (id,code,created_at,mode,full_name,email,phone,locality,preferred_language,amount_eur,preferences_json,comment,newsletter_consent,notice_acknowledged,transfer_acknowledged) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,1,1)`)
+      .bind(id,code,createdAt,mode,fullName,email,phone||null,locality||null,lang,amount,JSON.stringify(prefs),comment||null,newsletter?1:0).run();
+
+    // Guardem primer en D1. Si falla Resend, la persona rep igualment confirmació.
+    // El codi de la petició només es genera una vegada i no es duplica el registre.
+    if (env.RESEND_API_KEY) {
+      const result = await sendFinancingNotification(env.RESEND_API_KEY, {
+        id, code, createdAt, mode, fullName, email, phone: phone || null,
+        amount, preferences: prefs, language: lang!, comment: comment || null, newsletter,
+      });
+      // Si falla l'actualització d'estat, no invalidem la sol·licitud ja registrada.
+      try {
+        await env.DB.prepare(`UPDATE financing_requests SET notification_status = ?, notification_attempts = 1,
+          notification_sent_at = ?, notification_provider_id = ?, updated_at = ? WHERE id = ?`)
+          .bind(result.ok ? 'sent' : 'failed', result.ok ? new Date().toISOString() : null,
+            result.providerId || null, new Date().toISOString(), id).run();
+      } catch {
+        console.error('Financing notification status update failed');
+      }
+    } else {
+      try {
+        await env.DB.prepare(`UPDATE financing_requests SET notification_status = 'not_configured', updated_at = ? WHERE id = ?`)
+          .bind(new Date().toISOString(), id).run();
+      } catch {
+        console.error('Financing notification status update failed');
+      }
+    }
     return Response.json({ok:true,code},{status:201,headers:{'Cache-Control':'no-store'}});
   }catch(err){console.error('D1 financing insert failed',err);return reject('storage_error',503);}
 }
