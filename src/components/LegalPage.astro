@@ -1,0 +1,81 @@
+---
+import '../styles/global.css';
+import { legalContent, updated, type Locale, type LegalKind } from '../data/legal';
+const { lang, kind } = Astro.props as { lang: Locale; kind: LegalKind };
+const current = legalContent[lang][kind];
+const home = `/${lang}/`;
+const other = lang === 'ca' ? 'es' : 'ca';
+const labels = lang === 'ca'
+ ? {home:'Torna a l’inici', updated:'Última actualització', legal:'Avís legal', privacy:'Privacitat', cookies:'Cookies', language:'Canviar idioma'}
+ : {home:'Volver al inicio', updated:'Última actualización', legal:'Aviso legal', privacy:'Privacidad', cookies:'Cookies', language:'Cambiar idioma'};
+const canonical = `https://www.ladissident.org/${lang}/${kind}/`;
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={current.intro} />
+  <meta name="theme-color" content="#F4EDDF" />
+  <title>{current.title} · La Dissident</title>
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="ca" href={`https://www.ladissident.org/ca/${kind}/`} />
+  <link rel="alternate" hreflang="es" href={`https://www.ladissident.org/es/${kind}/`} />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+</head>
+<body>
+  <header class="site-header legal-site-header">
+    <div class="container legal-header-inner">
+      <a href={home} aria-label="La Dissident — inici"><img src="/logo-la-dissident.png" alt="La Dissident" width="145" height="56" /></a>
+      <nav aria-label={labels.language} class="legal-header-nav">
+        <a href={home}>{labels.home}</a>
+        <a href={`/ca/${kind}/`} lang="ca" aria-current={lang === 'ca' ? 'page' : undefined}>CA</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/es/${kind}/`} lang="es" aria-current={lang === 'es' ? 'page' : undefined}>ES</a>
+      </nav>
+    </div>
+  </header>
+  <main class="legal-main">
+    <div class="container legal-wrap">
+      <a class="legal-back" href={home}>← {labels.home}</a>
+      <h1>{current.title}</h1>
+      <p class="legal-intro">{current.intro}</p>
+      <p class="legal-updated">{labels.updated}: {updated}</p>
+      {current.sections.map((section) => <section class="legal-section">
+        <h2>{section[0]}</h2>
+        <p>{section[1]}</p>
+        {section.length > 2 && <p class="legal-identity">{section[2]}</p>}
+      </section>)}
+      <div class="legal-related" aria-label="Legal">
+        <a href={`/${lang}/avis-legal/`}>{labels.legal}</a>
+        <a href={`/${lang}/privacitat/`}>{labels.privacy}</a>
+        <a href={`/${lang}/cookies/`}>{labels.cookies}</a>
+      </div>
+    </div>
+  </main>
+  <footer class="legal-footer"><div class="container legal-footer-inner"><a href="mailto:hola@ladissident.org">hola@ladissident.org</a><span>© La Dissident, Coop. V.</span></div></footer>
+</body>
+</html>
+<style>
+  .legal-site-header{position:relative;background:#fff9f0;border-bottom:1px solid #d8c4a8}
+  .legal-header-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .legal-header-inner img{display:block;object-fit:contain;object-position:left center;width:145px;height:auto}
+  .legal-header-nav{display:flex;align-items:center;gap:12px;font-size:.86rem;font-weight:700}
+  .legal-header-nav a{text-decoration:none}.legal-header-nav a:hover{text-decoration:underline}
+  .legal-header-nav a[aria-current=page]{border-bottom:2px solid #a55e3b}
+  .legal-main{background:#f4eddf;padding:48px 0 84px}
+  .legal-wrap{max-width:810px}
+  .legal-back{display:inline-block;font-size:.9rem;font-weight:700;color:#647052;text-decoration:none;margin-bottom:24px}
+  .legal-wrap h1{font-size:clamp(2rem,5vw,3rem);margin:0 0 14px}
+  .legal-intro{font-size:1.08rem;max-width:690px;margin:0 0 10px}
+  .legal-updated{font-size:.83rem;color:#686158;margin:0 0 38px}
+  .legal-section{margin:0 0 29px;overflow-wrap:anywhere}
+  .legal-section h2{font-size:1.2rem;margin:0 0 9px}
+  .legal-section p{margin:0;line-height:1.67}
+  .legal-section .legal-identity{white-space:pre-line;margin-top:12px}
+  .legal-related{display:flex;gap:12px 22px;flex-wrap:wrap;border-top:1px solid #d8c4a8;padding-top:24px;margin-top:42px;font-weight:700;font-size:.89rem}
+  .legal-related a{color:#647052}
+  .legal-footer{background:#3b2a22;color:#fff9f0;padding:30px 0}
+  .legal-footer-inner{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;font-size:.88rem}
+  @media(max-width:600px){.legal-main{padding:30px 0 54px}.legal-header-inner{min-height:66px}.legal-header-inner img{width:105px}.legal-header-nav{gap:8px;font-size:.75rem}}
+</style>
