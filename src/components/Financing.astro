@@ -47,7 +47,7 @@ const explanation = ca ? [
   <summary>{L('Formulari de finançament · préstec o persona associada','Formulario de financiación · préstamo o persona asociada')}<span class="accordion-chevron" aria-hidden="true"></span></summary>
   <div class="form-inside finance-inside">
     <p class="info-note">{L('Aquest formulari només recull preferències. No formalitza cap operació ni autoritza transferències.','Este formulario solo recoge preferencias. No formaliza ninguna operación ni autoriza transferencias.')}</p>
-    <form class="demo-form finance-form" data-demo-form="finance" data-locale={locale}>
+    <form class="demo-form finance-form" data-demo-form="finance" data-locale={locale} novalidate>
       <fieldset class="finance-mode-field"><legend>{L('Quina modalitat t’interessa?','¿Qué modalidad te interesa?')}</legend>
         <label class="check"><input type="radio" name="financeMode" value="loan" required/><span>{L('Préstec personal a V. Andrés Bertí','Préstamo personal a V. Andrés Bertí')}</span></label>
         <label class="check"><input type="radio" name="financeMode" value="member"/><span>{L('Persona associada i aportació voluntària al capital social','Persona asociada y aportación voluntaria al capital social')}</span></label>
@@ -120,11 +120,19 @@ const explanation = ca ? [
           <p class="info-note">{L('Enviament pendent de configurar: falta la protecció antispam.','Envío pendiente de configurar: falta la protección antispam.')}</p>
         )}
         <button class="btn" type="submit" disabled={!turnstileSiteKey}>{L('Enviar sol·licitud','Enviar solicitud')}</button>
-        <p class="form-status" role="status" aria-live="polite" hidden></p>
+        <p class="form-status finance-error-summary" role="alert" aria-live="assertive" tabindex="-1" hidden></p>
       </div>
     </form>
   </div>
 </details>
+<dialog class="finance-success-dialog" data-finance-success aria-labelledby="finance-success-heading" aria-describedby="finance-success-copy">
+  <div class="finance-success-content">
+    <div class="finance-success-icon" aria-hidden="true">✓</div>
+    <h2 id="finance-success-heading">{L('Sol·licitud enviada amb èxit','Solicitud enviada con éxito')}</h2>
+    <p id="finance-success-copy">{L('Ens posarem en contacte amb tu. No faces cap transferència.','Nos pondremos en contacto contigo. No realices ninguna transferencia.')}</p>
+    <button type="button" class="btn" data-finance-close>{L('Entés','Entendido')}</button>
+  </div>
+</dialog>
 {turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 <script>
   const financeForm = document.querySelector<HTMLFormElement>('.finance-form');
@@ -148,14 +156,117 @@ const explanation = ca ? [
       if (language && !language.dataset.initialized) { language.value = location.pathname.startsWith('/es/') ? 'es' : 'ca'; language.dataset.initialized='1'; }
     };
     modeInputs.forEach(radio => radio.addEventListener('change', update));
+    const es = financeForm.dataset.locale === 'es';
+    const status = financeForm.querySelector<HTMLElement>('.finance-error-summary');
+    const submit = financeForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const dialog = document.querySelector<HTMLDialogElement>('[data-finance-success]');
+    const closeDialog = dialog?.querySelector<HTMLButtonElement>('[data-finance-close]');
+    const formAccordion = financeForm.closest<HTMLDetailsElement>('.form-accordion');
+    let sending = false;
+
+    const feedbackText = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement): string => {
+      if (field.validity.valueMissing) return es ? 'Este campo es obligatorio.' : 'Aquest camp és obligatori.';
+      if (field.name === 'email' && (field.validity.typeMismatch || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()))) {
+        return es ? 'Introduce un correo válido, por ejemplo nombre@dominio.org.' : 'Introdueix un correu vàlid, per exemple nom@domini.org.';
+      }
+      if (field.name === 'amount' && field.validity.rangeUnderflow) return es ? 'El importe mínimo es 3.000 €.' : 'L’import mínim és de 3.000 €.';
+      if (field.name === 'amount' && field.validity.rangeOverflow) return es ? 'Para personas asociadas, el máximo es de 50.000 €.' : 'Per a persones associades, el màxim és de 50.000 €.';
+      if (field.name === 'amount' && field.validity.stepMismatch) return es ? 'Indica un importe múltiplo de 100 €.' : 'Indica un import múltiple de 100 €.';
+      if (field.validity.typeMismatch || field.validity.badInput) return es ? 'Revisa el formato de este campo.' : 'Revisa el format d’aquest camp.';
+      return es ? 'Revisa este campo.' : 'Revisa aquest camp.';
+    };
+
+    const clearFieldError = (field: HTMLElement) => {
+      field.removeAttribute('aria-invalid');
+      const label = field.closest('label');
+      const hint = label?.querySelector<HTMLElement>('.finance-field-error');
+      hint?.remove();
+    };
+    const markFieldError = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, message: string) => {
+      field.setAttribute('aria-invalid', 'true');
+      const label = field.closest('label');
+      if (label) {
+        let hint = label.querySelector<HTMLElement>('.finance-field-error');
+        if (!hint) {
+          hint = document.createElement('span');
+          hint.className = 'finance-field-error';
+          hint.setAttribute('role', 'alert');
+          label.append(hint);
+        }
+        hint.textContent = message;
+      }
+    };
+    const showSummary = (message: string) => {
+      if (!status) return;
+      status.textContent = message;
+      status.hidden = false;
+    };
+    const clearSummary = () => {
+      if (status) { status.hidden = true; status.textContent = ''; }
+    };
+    const focusField = (field: HTMLElement) => {
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      field.focus({ preventScroll: true });
+    };
+    const validate = () => {
+      let firstInvalid: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null = null;
+      const fields = Array.from(financeForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input,select,textarea'));
+      fields.forEach(field => clearFieldError(field));
+      clearSummary();
+      for (const field of fields) {
+        if (field.disabled || field.type === 'hidden' || field.name === 'cf-turnstile-response') continue;
+        if (field.name === 'financeMode') {
+          if (!financeForm.querySelector('input[name="financeMode"]:checked')) {
+            firstInvalid ||= field;
+            const group = field.closest('fieldset');
+            group?.classList.add('finance-group-invalid');
+          }
+          continue;
+        }
+        let invalid = !field.checkValidity();
+        // La validació nativa de type=email accepta algunes adreces sense domini final.
+        if (field.name === 'email' && field.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())) invalid = true;
+        if (invalid) {
+          markFieldError(field, feedbackText(field));
+          firstInvalid ||= field;
+        }
+      }
+      if (firstInvalid) {
+        showSummary(es ? 'Revisa los campos señalados en rojo antes de enviar.' : 'Revisa els camps marcats en roig abans d’enviar.');
+        focusField(firstInvalid);
+        return false;
+      }
+      return true;
+    };
+
+    financeForm.addEventListener('input', event => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) return;
+      clearFieldError(target);
+      clearSummary();
+    });
+    financeForm.addEventListener('change', event => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) return;
+      clearFieldError(target);
+      if (target.name === 'financeMode') financeForm.querySelector('.finance-mode-field')?.classList.remove('finance-group-invalid');
+      clearSummary();
+    });
+    closeDialog?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+
     financeForm.addEventListener('submit', async event => {
       event.preventDefault();
-      const status = financeForm.querySelector<HTMLElement>('.form-status');
-      const submit = financeForm.querySelector<HTMLButtonElement>('button[type="submit"]');
-      const es = financeForm.dataset.locale === 'es';
-      if (!financeForm.reportValidity() || !submit || submit.disabled) return;
-      if (status) { status.hidden = false; status.textContent = es ? 'Enviando solicitud…' : 'Enviant sol·licitud…'; }
+      if (sending || !submit || submit.disabled || !validate()) return;
+      const turnstileToken = financeForm.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value;
+      if (!turnstileToken) {
+        showSummary(es ? 'Completa la verificación antispam antes de enviar.' : 'Completa la verificació antispam abans d’enviar.');
+        financeForm.querySelector<HTMLElement>('.cf-turnstile')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      sending = true;
       submit.disabled = true;
+      submit.textContent = es ? 'Enviando…' : 'Enviant…';
       try {
         const payload = Object.fromEntries(new FormData(financeForm).entries());
         const response = await fetch('/api/financing', {
@@ -163,19 +274,50 @@ const explanation = ca ? [
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
-        const result = await response.json() as { ok?: boolean; code?: string; error?: string };
-        if (!response.ok || !result.ok) throw new Error(result.error || 'submission_failed');
-        if (status) status.textContent = (es ? 'Solicitud recibida. Referencia: ' : 'Sol·licitud rebuda. Referència: ') + result.code + (es ? '. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : '. Ens posarem en contacte amb tu. No faces cap transferència.');
+        const result = await response.json() as { ok?: boolean; error?: string };
+        if (!response.ok || !result.ok) {
+          if (result.error === 'invalid_contact') {
+            const field = financeForm.querySelector<HTMLInputElement>('[name="email"]');
+            if (field) { markFieldError(field, es ? 'Comprueba el correo electrónico.' : 'Comprova el correu electrònic.'); focusField(field); }
+          }
+          if (result.error === 'invalid_amount') {
+            const field = financeForm.querySelector<HTMLInputElement>('[name="amount"]');
+            if (field) { markFieldError(field, es ? 'Revisa el importe indicado.' : 'Revisa l’import indicat.'); focusField(field); }
+          }
+          const errorMessages: Record<string, string> = es ? {
+            rate_limited: 'Has realizado demasiados intentos. Espera un minuto e inténtalo de nuevo.',
+            missing_verification: 'Completa la verificación antispam.',
+            verification_failed: 'La verificación ha caducado. Vuelve a comprobarla.',
+            invalid_contact: 'Revisa los datos de contacto marcados en rojo.',
+            invalid_amount: 'Revisa el importe marcado en rojo.',
+            missing_acknowledgement: 'Marca las dos casillas obligatorias.',
+          } : {
+            rate_limited: 'Has fet massa intents. Espera un minut i torna-ho a intentar.',
+            missing_verification: 'Completa la verificació antispam.',
+            verification_failed: 'La verificació ha caducat. Torna a comprovar-la.',
+            invalid_contact: 'Revisa les dades de contacte marcades en roig.',
+            invalid_amount: 'Revisa l’import marcat en roig.',
+            missing_acknowledgement: 'Marca les dues caselles obligatòries.',
+          };
+          showSummary(errorMessages[result.error || ''] || (es ? 'No se ha podido enviar la solicitud. Inténtalo de nuevo.' : 'No s’ha pogut enviar la sol·licitud. Torna-ho a intentar.'));
+          return;
+        }
+        // La referència queda guardada a D1, però no es mostra a la persona.
         financeForm.reset();
         update();
-        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
-      } catch (error) {
-        console.error('Error enviant formulari:', error);
-        if (status) status.textContent = es ? 'No se ha podido guardar la solicitud. Revisa la conexión e inténtalo de nuevo.' : 'No s’ha pogut guardar la sol·licitud. Revisa la connexió i torna-ho a intentar.';
-        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+        financeForm.querySelectorAll<HTMLElement>('[aria-invalid]').forEach(clearFieldError);
+        clearSummary();
+        if (formAccordion) formAccordion.open = false;
+        if (location.hash === '#form-financament') history.replaceState(null, '', location.pathname + location.search);
+        if (dialog?.showModal) dialog.showModal();
+        else alert(es ? 'Solicitud enviada con éxito. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : 'Sol·licitud enviada amb èxit. Ens posarem en contacte amb tu. No faces cap transferència.');
+      } catch {
+        showSummary(es ? 'No se ha podido conectar con el servidor. Inténtalo de nuevo.' : 'No s’ha pogut connectar amb el servidor. Torna-ho a intentar.');
       } finally {
+        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+        sending = false;
         submit.disabled = false;
-        if (status) status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        submit.textContent = es ? 'Enviar solicitud' : 'Enviar sol·licitud';
       }
     });
     update();
