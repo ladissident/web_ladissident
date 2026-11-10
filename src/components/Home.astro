@@ -231,7 +231,7 @@ const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
     addEventListener('hashchange', openFromHash);
     openFromHash();
 
-    document.querySelectorAll<HTMLFormElement>('.demo-form').forEach(form => {
+    document.querySelectorAll<HTMLFormElement>('.demo-form:not(.finance-form)').forEach(form => {
       form.addEventListener('submit', event => {
         event.preventDefault(); // NO enviar datos personales en el prototipo.
         const status = form.querySelector<HTMLElement>('.form-status');

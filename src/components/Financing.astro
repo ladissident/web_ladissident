@@ -2,6 +2,7 @@
 const { locale = 'ca' } = Astro.props;
 const ca = locale === 'ca';
 const L = (val: string, es: string) => ca ? val : es;
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''; 
 const explanation = ca ? [
   { title:'Opció 1. Préstec personal a V. Andrés Bertí', paragraphs:[
     'Prestaràs els diners directament a V. Andrés Bertí, que serà l’únic deutor i respondrà personalment de la devolució. La Dissident no serà prestatària, avaladora ni garant; l’immoble tampoc no garantirà el préstec.',
@@ -46,7 +47,7 @@ const explanation = ca ? [
   <summary>{L('Formulari de finançament · préstec o persona associada','Formulario de financiación · préstamo o persona asociada')}<span class="accordion-chevron" aria-hidden="true"></span></summary>
   <div class="form-inside finance-inside">
     <p class="info-note">{L('Aquest formulari només recull preferències. No formalitza cap operació ni autoritza transferències.','Este formulario solo recoge preferencias. No formaliza ninguna operación ni autoriza transferencias.')}</p>
-    <form class="demo-form finance-form" data-demo-form="finance">
+    <form class="demo-form finance-form" data-demo-form="finance" data-locale={locale}>
       <fieldset class="finance-mode-field"><legend>{L('Quina modalitat t’interessa?','¿Qué modalidad te interesa?')}</legend>
         <label class="check"><input type="radio" name="financeMode" value="loan" required/><span>{L('Préstec personal a V. Andrés Bertí','Préstamo personal a V. Andrés Bertí')}</span></label>
         <label class="check"><input type="radio" name="financeMode" value="member"/><span>{L('Persona associada i aportació voluntària al capital social','Persona asociada y aportación voluntaria al capital social')}</span></label>
@@ -113,12 +114,18 @@ const explanation = ca ? [
           <label class="check"><input type="checkbox" name="newsletter" disabled/><span>{L('Vull rebre notícies i actualitzacions generals de La Dissident (opcional).','Quiero recibir noticias y actualizaciones generales de La Dissident (opcional).')}</span></label>
         </div>
         <p class="muted finance-privacy">{L('Responsable: La Dissident, Coop. V. Finalitat: gestionar la sol·licitud, contactar i preparar una proposta. Legitimació: mesures precontractuals; les notícies, consentiment. Destinataris: proveïdors necessaris i assessoria quan corresponga, sense cessions comercials. Pots exercir els drets de protecció de dades a hola@ladissident.org. Consulta la política de privacitat.','Responsable: La Dissident, Coop. V. Finalidad: gestionar la solicitud, contactar y preparar una propuesta. Legitimación: medidas precontractuales; noticias, consentimiento. Destinatarios: proveedores necesarios y asesoría cuando corresponda, sin cesiones comerciales. Puedes ejercer tus derechos de protección de datos en hola@ladissident.org. Consulta la política de privacidad.')}</p>
-        <button class="btn" type="submit">{L('Enviar sol·licitud','Enviar solicitud')}</button>
-        <p class="form-status" role="status" aria-live="polite" hidden>{L('Prova local: no s’ha enviat ni guardat cap dada.','Prueba local: no se ha enviado ni guardado ningún dato.')}</p>
+        {turnstileSiteKey ? (
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="financing"></div>
+        ) : (
+          <p class="info-note">{L('Enviament pendent de configurar: falta la protecció antispam.','Envío pendiente de configurar: falta la protección antispam.')}</p>
+        )}
+        <button class="btn" type="submit" disabled={!turnstileSiteKey}>{L('Enviar sol·licitud','Enviar solicitud')}</button>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
       </div>
     </form>
   </div>
 </details>
+{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 <script>
   const financeForm = document.querySelector<HTMLFormElement>('.finance-form');
   if (financeForm) {
@@ -141,7 +148,36 @@ const explanation = ca ? [
       if (language && !language.dataset.initialized) { language.value = location.pathname.startsWith('/es/') ? 'es' : 'ca'; language.dataset.initialized='1'; }
     };
     modeInputs.forEach(radio => radio.addEventListener('change', update));
-    financeForm.addEventListener('submit', event => { event.preventDefault(); const status=financeForm.querySelector<HTMLElement>('.form-status'); if (status) { status.hidden=false; status.scrollIntoView({behavior:'smooth',block:'nearest'}); } });
+    financeForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const status = financeForm.querySelector<HTMLElement>('.form-status');
+      const submit = financeForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const es = financeForm.dataset.locale === 'es';
+      if (!financeForm.reportValidity() || !submit || submit.disabled) return;
+      if (status) { status.hidden = false; status.textContent = es ? 'Enviando solicitud…' : 'Enviant sol·licitud…'; }
+      submit.disabled = true;
+      try {
+        const payload = Object.fromEntries(new FormData(financeForm).entries());
+        const response = await fetch('/api/financing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json() as { ok?: boolean; code?: string; error?: string };
+        if (!response.ok || !result.ok) throw new Error(result.error || 'submission_failed');
+        if (status) status.textContent = (es ? 'Solicitud recibida. Referencia: ' : 'Sol·licitud rebuda. Referència: ') + result.code + (es ? '. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : '. Ens posarem en contacte amb tu. No faces cap transferència.');
+        financeForm.reset();
+        update();
+        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+      } catch (error) {
+        console.error('Error enviant formulari:', error);
+        if (status) status.textContent = es ? 'No se ha podido guardar la solicitud. Revisa la conexión e inténtalo de nuevo.' : 'No s’ha pogut guardar la sol·licitud. Revisa la connexió i torna-ho a intentar.';
+        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+      } finally {
+        submit.disabled = false;
+        if (status) status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
     update();
   }
 </script>
