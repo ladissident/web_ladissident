@@ -7,6 +7,7 @@ const locale = lang === 'es' ? 'es' : 'ca';
 const t = content[locale];
 const money = (n:number) => new Intl.NumberFormat(locale === 'ca' ? 'ca-ES' : 'es-ES', { style:'currency', currency:'EUR', maximumFractionDigits:0 }).format(n);
 const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
+const donationsEnabled = false;
 
 ---
 <Base lang={locale} title={`La Dissident`} description={t.headline}>
@@ -146,6 +147,17 @@ const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
           <details class="form-accordion" id="form-aportacio" data-form="donation">
             <summary>{locale === 'ca' ? 'Aportació a fons perdut · transferència directa' : 'Aportación a fondo perdido · transferencia directa'}<span class="accordion-chevron" aria-hidden="true"></span></summary>
             <div class="form-inside donation-information">
+            {!donationsEnabled && (
+  <div class="donation-pending">
+    <p>
+      {locale === 'ca'
+        ? 'Pròximament habilitarem el compte bancari per a fer aportacions a fons perdut a La Dissident. Estem acabant de preparar-ho perquè pugues col·laborar amb el projecte mitjançant transferència bancària.'
+        : 'Próximamente habilitaremos la cuenta bancaria para realizar aportaciones a fondo perdido a La Dissident. Estamos terminando de prepararlo para que puedas colaborar con el proyecto mediante transferencia bancaria.'}
+    </p>
+  </div>
+)}
+{donationsEnabled && (
+  <>
               <p>{locale === 'ca' ? 'Les aportacions a fons perdut es fan directament al compte de La Dissident. Són definitives, no reintegrables i no generen remuneració, propietat, dret d’ús, vot ni cap altre dret econòmic o polític.' : 'Las aportaciones a fondo perdido se realizan directamente a la cuenta de La Dissident. Son definitivas, no reintegrables y no generan remuneración, propiedad, derecho de uso, voto ni ningún otro derecho económico o político.'}</p>
               <div class="inset-panel bank-panel">
                 <h3>{locale === 'ca' ? 'Dades per a la transferència' : 'Datos para la transferencia'}</h3>
@@ -162,6 +174,8 @@ const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
                 <a class="btn" href={locale === 'ca' ? 'mailto:hola@ladissident.org?subject=Sol%C2%B7licitud%20de%20tassa%20La%20Dissident&body=Nom%20i%20cognoms%3A%0AData%3A%0AImport%3A%0ARefer%C3%A8ncia%3A%0ALliurament%20(recull%2Fenviament)%3A%0AAdre%C3%A7a%20si%20cal%3A%0A%0AAdjunte%20el%20justificant%20amb%20la%20resta%20de%20dades%20ocultes.' : 'mailto:hola@ladissident.org?subject=Solicitud%20de%20taza%20La%20Dissident&body=Nombre%20y%20apellidos%3A%0AFecha%3A%0AImporte%3A%0AReferencia%3A%0AEntrega%20(recogida%2Fenv%C3%ADo)%3A%0ADirecci%C3%B3n%20si%20corresponde%3A%0A%0AAdjunto%20el%20justificante%20ocultando%20los%20dem%C3%A1s%20datos.'}>{locale === 'ca' ? 'Sol·licitar la tassa per correu' : 'Solicitar la taza por correo'}</a>
                 <p class="muted">{locale === 'ca' ? 'Hauràs d’adjuntar manualment el justificant al teu correu. No envies dades bancàries que no siguen necessàries.' : 'Tendrás que adjuntar manualmente el justificante en tu correo. No envíes datos bancarios innecesarios.'}</p>
               </div>
+                  </>
+  )}
             </div>
           </details>
           <Financing locale={locale}/>

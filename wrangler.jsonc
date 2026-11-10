@@ -2,6 +2,7 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "web-ladissident",
   "main": "./worker/index.ts",
+  "workers_dev": false,
   "compatibility_date": "2026-11-09",
   "assets": {
     "directory": "./dist",

@@ -481,3 +481,21 @@ html {scroll-padding-top:100px}
     margin-left: 12px;
   }
 }
+
+/* Avís temporal: aportacions a fons perdut */
+.donation-pending {
+  background: #F4DFD5;
+  border-left: 4px solid #A55E3B;
+  padding: 18px 22px;
+  border-radius: 6px;
+  color: #3B2A22;
+}
+
+.donation-pending p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.donation-information [hidden] {
+  display: none !important;
+}

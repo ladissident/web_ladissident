@@ -1,5 +1,5 @@
 /** Continguts visibles. Mantén les claus de CA i ES equivalents. */
-export const campaign = { goal: 115000, deadline: '2027-01-31', demoRaised: 49450, demoUpdated: '2026-11-04' };
+export const campaign = { goal: 115000, deadline: '2027-01-31', demoRaised: 0, demoUpdated: '2026-11-10' };
 export const bankDetails = { owner: '', iban: '' }; // Completar només quan la cooperativa valide el titular i IBAN.
 /** Deixa buit el valor fins que tingues l'ID numèric de cada vídeo de Vimeo. */
 export const vimeoVideos: Record<'ca' | 'es', string> = {
