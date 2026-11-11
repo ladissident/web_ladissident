@@ -552,7 +552,7 @@ html {scroll-padding-top:100px}
   line-height: 1.5;
   opacity: 0.75;
   margin-top: 15px;
-  margin-bottom: 28px;
+  margin-bottom: 25px;
 }
 
 /* Separació de la verificació de Cloudflare */
@@ -562,8 +562,9 @@ html {scroll-padding-top:100px}
   margin-bottom: 20px;
 }
 
-/* Més espai abans del botó d'enviar */
 .finance-form button[type="submit"] {
-  margin-top: 12px;
+  display: block;
+  width: fit-content;
+  margin: 12px auto 0px;
 }
 
