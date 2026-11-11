@@ -464,7 +464,7 @@ html {scroll-padding-top:100px}
   gap: 6px;
 }
 
-.footer-contact small {
+.footer-brand small {
   font-size: 0.75rem;
   opacity: 0.8;
 }
@@ -499,3 +499,71 @@ html {scroll-padding-top:100px}
 .donation-information [hidden] {
   display: none !important;
 }
+
+/* Enllaç de Telegram en el footer */
+.footer-telegram {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer-telegram svg {
+  flex-shrink: 0;
+}
+
+.footer-telegram:hover {
+  text-decoration: underline;
+}
+
+/* Correu i Telegram amb el mateix estil */
+.footer-contact > a,
+.footer-telegram {
+  font-size: 0.85rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Subratllat només quan passes el ratolí */
+.footer-contact > a:hover {
+  text-decoration: underline;
+}
+
+/* Copyright sempre davall del logotip */
+.footer-copyright {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* Color del text de la secció de difusió */
+.share-section-color h2,
+.share-section-color p {
+  color: #F4EDDF;
+}
+
+/* Text legal del formulari: més xicotet */
+.finance-form .finance-privacy {
+  font-size: 0.6rem;
+  line-height: 1.5;
+  opacity: 0.75;
+  margin-top: 15px;
+  margin-bottom: 28px;
+}
+
+/* Separació de la verificació de Cloudflare */
+.finance-form .cf-turnstile,
+.finance-form .finance-privacy + .info-note {
+  margin-top: 7px;
+  margin-bottom: 20px;
+}
+
+/* Més espai abans del botó d'enviar */
+.finance-form button[type="submit"] {
+  margin-top: 12px;
+}
+

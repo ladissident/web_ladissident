@@ -184,8 +184,11 @@ const donationsEnabled = false;
     </section>
 
     <section class="section" id="preguntes"><div class="container"><h2>{t.faq}</h2><div class="faq-list">{t.faqItems.map(([question,answer]) => <details class="faq-item"><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
-    <section class="section share-section" id="difusio"><div class="container narrow"><h2>{t.shareTitle}</h2><p>{t.shareCopy}</p><button class="btn share-btn" data-share data-copy={t.copied}>{t.share}</button><p class="share-status" role="status" aria-live="polite"></p></div></section>
+   
+<div class="share-section-color">
+   <section class="section share-section" id="difusio"><div class="container narrow"><h2>{t.shareTitle}</h2><p>{t.shareCopy}</p><button class="btn share-btn" data-share data-copy={t.copied}>{t.share}</button><p class="share-status" role="status" aria-live="polite"></p></div></section>
   </main>
+  </div>
 
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -193,19 +196,46 @@ const donationsEnabled = false;
     <!-- Esquerra: correu -->
 <!-- Esquerra: correu i copyright -->
 <div class="footer-contact">
+
+  <a
+    href="https://t.me/LADISSIDENT"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="footer-telegram"
+    aria-label={locale === 'ca'
+      ? 'Segueix La Dissident a Telegram'
+      : 'Sigue La Dissident en Telegram'}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M21.5 2.6 2.8 9.8c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.9 5.8c.2.6.1.9.8.9.5 0 .8-.2 1.1-.5l2.7-2.6 5 3.7c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.8-1.5-1.4Zm-12 13.9-.5-4.1L18.4 6l-7.7 7.5-1.2 3Z"/>
+    </svg>
+    <span>Canal de Telegram</span>
+  </a>
   <a href="mailto:hola@ladissident.org">
     hola@ladissident.org
   </a>
-  <small>© La Dissident, Coop. V.</small>
+
+
 </div>
 
+<div class="footer-brand">
+
     <!-- Centre: logotip crema -->
-    <a href={`/${lang}/`} class="footer-brand">
+    <a href={`/${lang}/`}>
       <img
         src="/logo-la-dissident-2.png"
         alt="La Dissident"
       />
     </a>
+            <small>© La Dissident, Coop. V.</small>
+  </div>
 
     <!-- Dreta: enllaços legals -->
     <nav class="footer-legal" aria-label="Enllaços legals">

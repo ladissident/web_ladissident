@@ -1,0 +1,457 @@
+---
+const { locale = 'ca' } = Astro.props;
+const ca = locale === 'ca';
+const L = (val: string, es: string) => ca ? val : es;
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''; 
+const explanation = ca ? [
+  { title:'Opció 1. Préstec personal a V. Andrés Bertí', paragraphs:[
+    'Prestaràs els diners directament a V. Andrés Bertí, que serà l’únic deutor i respondrà personalment de la devolució. La Dissident no serà prestatària, avaladora ni garant; l’immoble tampoc no garantirà el préstec.',
+    'Pot interessar-te si no vols mantindre una relació societària, prefereixes un contracte individual o necessites començar a recuperar els diners abans d’un any. Hi ha dos mesos inicials de carència fora del termini de devolució, que pot arribar a deu anys.',
+    'Podràs indicar import, termini, urgència, carència voluntària i periodicitat. Abans de transferir rebràs fitxa informativa, simulació, riscos, contracte, calendari i informació fiscal i sobre el model 600.',
+    'Al 0 % recuperes el mateix import nominal, sense interessos. El risc principal és la solvència personal de V. Andrés Bertí: la cooperativa i l’immoble no responen del préstec.'
+  ]},
+  { title:'Opció 2. Persona associada i capital social', paragraphs:[
+    'Sol·licitaràs l’admissió com a persona associada i faràs una aportació voluntària al capital social de La Dissident. La cooperativa assumirà el reembossament segons l’acord d’emissió. No és un préstec ordinari.',
+    'Pot interessar-te si vols finançar directament la cooperativa, mantindre una relació societària i pots deixar els diners almenys un any. Ser persona associada no implica ser habitant ni tindre dret d’ús o propietat individual. Pots assistir a l’Assemblea amb veu, però sense vot, i no formar part del Consell Rector.',
+    'Import previst: mínim 3.000 € i màxim 50.000 € per persona. Remuneració al 0 %, sense interessos ni IPC. No podrà haver-hi reembossaments durant el primer any després de subscriure i desembossar. Després es preveu devolució ordinàriament mensual, en un màxim de deu anys des del desembossament.',
+    'Abans de transferir rebràs informació sobre la condició de persona associada, estatuts, acord d’emissió, riscos, resolució del Consell Rector, document de subscripció i calendari. L’admissió requereix aprovació del Consell Rector i pots rebutjar les condicions finals.',
+    'El capital social té menys liquiditat que un préstec ordinari. No està cobert pel Fons de Garantia de Depòsits, l’immoble no el garanteix automàticament i el reembossament depén de l’acord, la normativa i la situació econòmica de la cooperativa.'
+  ]},
+  { title:'Quina opció pot convindre’t més?', paragraphs:[
+    'Persona associada: si pots mantindre els diners almenys un any, vols finançar directament la cooperativa i prefereixes un acord col·lectiu.',
+    'Préstec personal: si necessites començar a recuperar els diners abans d’un any, no vols relació societària o prefereixes un contracte i calendari individuals.',
+    'Si encara no ho tens clar, no cal decidir ara. Indica les teues necessitats i rebràs una comparació adaptada. Emplenar el formulari no formalitza cap operació ni autoritza transferències.'
+  ]}
+] : [
+  { title:'Opción 1. Préstamo personal a V. Andrés Bertí', paragraphs:[
+    'Prestarás dinero directamente a V. Andrés Bertí, que será el único deudor y responderá personalmente de su devolución. La Dissident no será prestataria, avalista ni garante; el inmueble tampoco garantizará el préstamo.',
+    'Puede interesarte si no quieres relación societaria, prefieres un contrato individual o necesitas recuperar dinero antes de un año. Hay dos meses iniciales de carencia, fuera del plazo posterior de devolución de hasta diez años.',
+    'Podrás indicar importe, plazo, urgencia, carencia voluntaria y periodicidad. Antes de transferir recibirás ficha informativa, simulación, riesgos, contrato, calendario e información fiscal y del modelo 600.',
+    'Al 0 % recuperas el mismo importe nominal, sin intereses. El principal riesgo es la solvencia personal de V. Andrés Bertí: la cooperativa y el inmueble no responden del préstamo.'
+  ]},
+  { title:'Opción 2. Persona asociada y capital social', paragraphs:[
+    'Solicitarás tu admisión como persona asociada y una aportación voluntaria al capital social de La Dissident. La cooperativa asumirá el reembolso según el acuerdo de emisión. No es un préstamo ordinario.',
+    'Puede interesarte si quieres financiar directamente a la cooperativa, mantener una relación societaria y puedes aportar durante al menos un año. Ser persona asociada no equivale a ser habitante ni concede derecho de uso o propiedad individual. Puedes asistir a la Asamblea con voz, pero sin voto, y no formar parte del Consejo Rector.',
+    'Importe previsto: entre 3.000 € y 50.000 € por persona. Remuneración al 0 %, sin intereses ni IPC. No podrá reembolsarse durante el primer año desde la suscripción y el desembolso. Después se prevé devolución ordinariamente mensual, con plazo máximo total de diez años desde el desembolso.',
+    'Antes de transferir recibirás información sobre la condición de persona asociada, estatutos, acuerdo de emisión, riesgos, resolución del Consejo Rector, documento de suscripción y calendario. La admisión requiere aprobación del Consejo Rector y podrás rechazar las condiciones finales.',
+    'El capital social tiene menos liquidez que un préstamo ordinario. No está cubierto por el Fondo de Garantía de Depósitos, el inmueble no lo garantiza automáticamente y el reembolso depende del acuerdo, la normativa y la situación económica de la cooperativa.'
+  ]},
+  { title:'¿Qué opción puede convenirte más?', paragraphs:[
+    'Persona asociada: si puedes mantener el dinero al menos un año, quieres financiar directamente a la cooperativa y prefieres un acuerdo colectivo.',
+    'Préstamo personal: si necesitas empezar a recuperar el dinero antes de un año, no deseas relación societaria o prefieres contrato y calendario individuales.',
+    'Si todavía no lo tienes claro, no tienes que decidir ahora. Indica tus necesidades y recibirás una comparación adaptada. Rellenar el formulario no formaliza operaciones ni autoriza transferencias.'
+  ]}
+];
+---
+<details class="form-accordion" id="form-financament" data-form="finance">
+  <summary>{L('Formulari de finançament · préstec o persona associada','Formulario de financiación · préstamo o persona asociada')}<span class="accordion-chevron" aria-hidden="true"></span></summary>
+  <div class="form-inside finance-inside">
+    <p class="info-note">{L('Aquest formulari només recull preferències. No formalitza cap operació ni autoritza transferències.','Este formulario solo recoge preferencias. No formaliza ninguna operación ni autoriza transferencias.')}</p>
+    <form class="demo-form finance-form" data-demo-form="finance" data-locale={locale} novalidate>
+      <fieldset class="finance-mode-field">
+        <legend>{L('Quina modalitat t’interessa?','¿Qué modalidad te interesa?')}</legend>
+        <div class="finance-mode-options">
+          <label class="finance-mode-option">
+            <input type="radio" name="financeMode" value="loan" required/>
+            <span class="finance-mode-card">
+              <span class="finance-mode-card-title">{L('Préstec personal','Préstamo personal')}</span>
+              <span class="finance-mode-card-detail">{L('A V. Andrés Bertí','A V. Andrés Bertí')}</span>
+              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
+            </span>
+          </label>
+          <label class="finance-mode-option">
+            <input type="radio" name="financeMode" value="member"/>
+            <span class="finance-mode-card">
+              <span class="finance-mode-card-title">{L('Persona associada','Persona asociada')}</span>
+              <span class="finance-mode-card-detail">{L('Aportació voluntària al capital social','Aportación voluntaria al capital social')}</span>
+              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
+            </span>
+          </label>
+          <label class="finance-mode-option finance-mode-option-wide">
+            <input type="radio" name="financeMode" value="undecided"/>
+            <span class="finance-mode-card">
+              <span class="finance-mode-card-title">{L('Encara no ho tinc clar','Todavía no lo tengo claro')}</span>
+              <span class="finance-mode-card-detail">{L('Vull informació per a decidir','Quiero información para decidir')}</span>
+              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <div class="finance-explainer inset-panel" data-finance-explainer hidden>
+        <h3>{L('Tria com vols donar suport a la campanya','Elige cómo quieres apoyar la campaña')}</h3>
+        <p>{L('A més de les aportacions a fons perdut i la difusió, pots ajudar amb finançament que es retornarà. Les dues modalitats tenen responsables i condicions diferents. Llig l’explicació abans de decidir.','Además de las aportaciones a fondo perdido y la difusión, puedes ayudar mediante financiación que será devuelta. Ambas modalidades tienen responsables y condiciones diferentes. Lee la explicación antes de decidir.')}</p>
+        {explanation.map((item, index) => (
+          <details class="faq-item finance-explain-item">
+            <summary>{item.title}</summary>
+            {item.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+            {index === 2 && (
+        <div class="finance-comparison"><h4>{L('Comparació ràpida','Comparación rápida')}</h4>
+          <div class="finance-table-scroll"><table><thead><tr><th>{L('Aspecte','Aspecto')}</th><th>{L('Préstec personal','Préstamo personal')}</th><th>{L('Persona associada','Persona asociada')}</th></tr></thead><tbody>
+          <tr><th>{L('Rep els diners','Recibe el dinero')}</th><td>V. Andrés Bertí</td><td>La Dissident</td></tr>
+          <tr><th>{L('Responsable','Responsable')}</th><td>V. Andrés Bertí</td><td>{L('Cooperativa segons emissió','Cooperativa según emisión')}</td></tr>
+          <tr><th>{L('Primera devolució','Primer reembolso')}</th><td>{L('Després de 2 mesos','Después de 2 meses')}</td><td>{L('No abans d’1 any','No antes de 1 año')}</td></tr>
+          <tr><th>{L('Termini màxim','Plazo máximo')}</th><td>{L('10 anys després de la carència','10 años tras la carencia')}</td><td>{L('10 anys des del desembossament','10 años desde el desembolso')}</td></tr>
+          <tr><th>{L('Relació societària','Relación societaria')}</th><td>{L('No','No')}</td><td>{L('Sí, sense vot ni dret d’ús','Sí, sin voto ni derecho de uso')}</td></tr>
+          <tr><th>{L('Garantia de l’immoble','Garantía del inmueble')}</th><td>{L('No','No')}</td><td>{L('No','No')}</td></tr>
+          </tbody></table></div>
+        </div>
+            )}
+          </details>
+        ))}
+      </div>
+      <div class="finance-branch finance-branch-plain" data-finance-branch="undecided" hidden>
+        <h3>{L('T’ajudem a triar','Te ayudamos a elegir')}</h3>
+        <p>{L(
+          'Si encara no tens clar quina modalitat triar, vols més informació o prefereixes una atenció individualitzada, emplena el formulari següent. Indica’ns les teues preferències i ens posarem en contacte amb tu per explicar-te les opcions i preparar una comparació adaptada. No et compromet a aportar diners.',
+          'Si todavía no tienes claro qué modalidad elegir, quieres más información o prefieres una atención individualizada, rellena el siguiente formulario. Indícanos tus preferencias y nos pondremos en contacto contigo para explicarte las opciones y preparar una comparación adaptada. No te compromete a aportar dinero.'
+        )}</p>
+      </div>
+      <div class="finance-common" data-finance-common hidden>
+        <div class="two-cols"><label>{L('Nom i cognoms','Nombre y apellidos')}<input name="fullName" autocomplete="name" required disabled/></label><label>{L('Correu electrònic','Correo electrónico')}<input name="email" type="email" autocomplete="email" required disabled/></label></div>
+        <div class="two-cols"><label>{L('Telèfon (opcional)','Teléfono (opcional)')}<input name="phone" type="tel" autocomplete="tel" disabled/></label><label>{L('Província o localitat (opcional)','Provincia o localidad (opcional)')}<input name="location" disabled/></label></div>
+        <div class="two-cols"><label>{L('Idioma preferit','Idioma preferido')}<select name="preferredLanguage" required disabled><option value="ca">{L('Valencià','Valenciano')}</option><option value="es">{L('Castellà','Castellano')}</option></select></label><label>{L('Quantitat aproximada (€)','Cantidad aproximada (€)')}<input name="amount" type="number" min="3000" step="100" value="3000" required disabled/></label></div>
+        <p class="muted">{L('La quantitat és orientativa i no et compromet. No es demanen dades bancàries ni documents d’identitat.','La cantidad es orientativa y no te compromete. No se piden datos bancarios ni documentos de identidad.')}</p>
+        <div class="finance-branch inset-panel" data-finance-branch="loan" hidden>
+          <h3>{L('Preferències del préstec personal','Preferencias del préstamo personal')}</h3>
+          <p>{L('V. Andrés Bertí és l’únic deutor i respon amb el patrimoni personal. La cooperativa i l’immoble no garanteixen el préstec. Dos mesos de carència inicial i fins a deu anys posteriors de devolució, sense penalització per amortització anticipada.','V. Andrés Bertí es el único deudor y responde con su patrimonio personal. La cooperativa y el inmueble no garantizan el préstamo. Dos meses de carencia inicial y hasta diez años posteriores de devolución, sin penalización por amortización anticipada.')}</p>
+          <label>{L('Modalitat preferida','Modalidad preferida')}<select name="loanRemuneration" disabled><option value="zero">{L('Préstec al 0 %','Préstamo al 0 %')}</option><option value="ipc">{L('Actualització vinculada a l’IPC','Actualización vinculada al IPC')}</option><option value="both">{L('Vull conéixer les dues','Quiero conocer ambas')}</option></select></label>
+          <div class="two-cols"><label>{L('En quants anys preferiries recuperar el préstec?','¿En cuántos años preferirías recuperar el préstamo?')}<select name="loanYears" disabled>{['1','2','3','5','7','10'].map(n=><option value={n}>{n}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option><option value="discuss">{L('Vull parlar-ne','Quiero hablarlo')}</option></select></label>
+          <label>{L('Periodicitat preferida','Periodicidad preferida')}<select name="loanFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="semiannual">{L('Semestral','Semestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
+          <label>{L('Acceptaries ampliar voluntàriament la carència inicial?','¿Aceptarías ampliar voluntariamente la carencia inicial?')}<select name="loanGrace" disabled><option value="2">{L('No, només els 2 mesos inicials','No, solo los 2 meses iniciales')}</option><option value="6">{L('Fins a 6 mesos en total','Hasta 6 meses en total')}</option><option value="12">{L('Fins a 12 mesos','Hasta 12 meses')}</option><option value="24">{L('Fins a 24 mesos','Hasta 24 meses')}</option><option value="more">{L('Podria acceptar-ne més','Podría aceptar más')}</option><option value="discuss">{L('Vull parlar-ne','Quiero hablarlo')}</option></select></label>
+          <label>{L('Quina flexibilitat acceptaries?','¿Qué flexibilidad aceptarías?')}<select name="loanFlexibility" disabled><option value="fixed">{L('Calendari fix','Calendario fijo')}</option><option value="early">{L('Devolució anticipada sense penalització','Devolución anticipada sin penalización')}</option><option value="small">{L('Xicotetes variacions sense canviar data final','Pequeñas variaciones sin cambiar fecha final')}</option><option value="flexible">{L('Devolució flexible dins del termini','Devolución flexible dentro del plazo')}</option><option value="discuss">{L('Vull parlar-ne','Quiero hablarlo')}</option></select></label>
+        </div>
+        <div class="finance-branch inset-panel" data-finance-branch="member" hidden>
+          <h3>{L('Preferències de la persona associada','Preferencias de la persona asociada')}</h3>
+          <p>{L('Aportació voluntària al capital social entre 3.000 € i 50.000 €, al 0 % i sense IPC. Cal admissió del Consell Rector. No hi ha dret d’ús ni vot. El capital no es reembossa abans d’un any i el termini màxim previst és de deu anys des del desembossament.','Aportación voluntaria al capital social entre 3.000 € y 50.000 €, al 0 % y sin IPC. Requiere admisión del Consejo Rector. No concede derecho de uso ni voto. No se reembolsa antes de un año y el plazo máximo previsto es de diez años desde el desembolso.')}</p>
+          <div class="two-cols"><label>{L('Termini preferit de recuperació','Plazo preferido de recuperación')}<select name="memberYears" disabled>{['2','3','5','7','10'].map(n=><option value={n}>{n}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label>
+          <label>{L('Preferència de reembossament','Preferencia de reembolso')}<select name="memberFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="maturity">{L('Al venciment','Al vencimiento')}</option><option value="flexible">{L('Flexible segons liquiditat','Flexible según liquidez')}</option></select></label></div>
+          <label>{L('Necessites prioritat?','¿Necesitas prioridad?')}<select name="memberPriority" disabled><option value="short">{L('Necessite un termini curt','Necesito un plazo corto')}</option><option value="medium">{L('Puc acceptar un termini intermedi','Puedo aceptar un plazo intermedio')}</option><option value="long">{L('Puc acceptar una permanència llarga','Puedo aceptar una permanencia larga')}</option><option value="explain">{L('Vull explicar-ho','Quiero explicarlo')}</option></select></label>
+        </div>
+        <div class="finance-shared-preferences" data-shared-preferences hidden>
+          <div class="two-cols"><label>{L('Quan necessitaries començar a recuperar els diners?','¿Cuándo necesitarías empezar a recuperar el dinero?')}<select name="needStart" disabled><option value="2months">{L('Després de 2 mesos','Después de 2 meses')}</option><option value="1year">{L('Després d’1 any','Después de 1 año')}</option><option value="later">{L('Puc esperar més','Puedo esperar más')}</option><option value="unsure">{L('No ho sé','No lo sé')}</option></select></label><label>{L('Termini preferit de devolució','Plazo preferido de devolución')}<select name="preferredYears" disabled>{['1','2','3','5','7','10'].map(n=><option value={n}>{n} {L('anys','años')}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
+          <div class="two-cols"><label>{L('Carència voluntària acceptable','Carencia voluntaria aceptable')}<select name="preferredGrace" disabled><option value="none">{L('No','No')}</option><option value="6">{L('Fins a 6 mesos','Hasta 6 meses')}</option><option value="12">{L('Fins a 12 mesos','Hasta 12 meses')}</option><option value="24">{L('Fins a 24 mesos','Hasta 24 meses')}</option><option value="more">{L('Més temps','Más tiempo')}</option></select></label><label>{L('Periodicitat preferida','Periodicidad preferida')}<select name="preferredFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="semiannual">{L('Semestral','Semestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
+        </div>
+        <label>{L('Comentaris o necessitats que vulgues explicar (opcional; evita dades sensibles)','Comentarios o necesidades que quieras explicar (opcional; evita datos sensibles)')}<textarea name="comment" rows="3" disabled></textarea></label>
+        <div class="finance-consents consents">
+          <label class="check"><input type="checkbox" name="understanding" required disabled/><span>{L('He llegit la informació bàsica i entenc que enviar aquest formulari no formalitza cap préstec, aportació o alta com a persona associada.','He leído la información básica y entiendo que enviar este formulario no formaliza ningún préstamo, aportación o alta como persona asociada.')}</span></label>
+          <label class="check"><input type="checkbox" name="noTransfer" required disabled/><span>{L('Entenc que no he de fer cap transferència fins a rebre instruccions i signar la documentació corresponent.','Entiendo que no debo realizar ninguna transferencia hasta recibir instrucciones y firmar la documentación correspondiente.')}</span></label>
+          <label class="check"><input type="checkbox" name="newsletter" disabled/><span>{L('Vull rebre notícies i actualitzacions generals de La Dissident (opcional).','Quiero recibir noticias y actualizaciones generales de La Dissident (opcional).')}</span></label>
+        </div>
+        <p class="muted finance-privacy">{L('Responsable: La Dissident, Coop. V. Finalitat: gestionar la sol·licitud, contactar i preparar una proposta. Legitimació: mesures precontractuals; les notícies, consentiment. Destinataris: proveïdors necessaris i assessoria quan corresponga, sense cessions comercials. Pots exercir els drets de protecció de dades a hola@ladissident.org. Consulta la política de privacitat.','Responsable: La Dissident, Coop. V. Finalidad: gestionar la solicitud, contactar y preparar una propuesta. Legitimación: medidas precontractuales; noticias, consentimiento. Destinatarios: proveedores necesarios y asesoría cuando corresponda, sin cesiones comerciales. Puedes ejercer tus derechos de protección de datos en hola@ladissident.org. Consulta la política de privacidad.')}</p>
+        {turnstileSiteKey ? (
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="financing"></div>
+        ) : (
+          <p class="info-note">{L('Enviament pendent de configurar: falta la protecció antispam.','Envío pendiente de configurar: falta la protección antispam.')}</p>
+        )}
+        <button class="btn" type="submit" disabled={!turnstileSiteKey}>{L('Enviar sol·licitud','Enviar solicitud')}</button>
+        <p class="form-status finance-error-summary" role="alert" aria-live="assertive" tabindex="-1" hidden></p>
+      </div>
+    </form>
+  </div>
+</details>
+<dialog class="finance-success-dialog" data-finance-success aria-labelledby="finance-success-heading" aria-describedby="finance-success-copy">
+  <div class="finance-success-content">
+    <div class="finance-success-icon" aria-hidden="true">✓</div>
+    <h2 id="finance-success-heading">{L('Sol·licitud enviada amb èxit','Solicitud enviada con éxito')}</h2>
+    <p id="finance-success-copy">{L('Ens posarem en contacte amb tu. No faces cap transferència.','Nos pondremos en contacto contigo. No realices ninguna transferencia.')}</p>
+    <button type="button" class="btn" data-finance-close>{L('Entés','Entendido')}</button>
+  </div>
+</dialog>
+{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+<script>
+  const financeForm = document.querySelector<HTMLFormElement>('.finance-form');
+  if (financeForm) {
+    const modeInputs = financeForm.querySelectorAll<HTMLInputElement>('input[name="financeMode"]');
+    const common = financeForm.querySelector<HTMLElement>('[data-finance-common]');
+    const explainer = financeForm.querySelector<HTMLElement>('[data-finance-explainer]');
+    const shared = financeForm.querySelector<HTMLElement>('[data-shared-preferences]');
+    const amount = financeForm.querySelector<HTMLInputElement>('input[name="amount"]');
+    const update = () => {
+      const mode = financeForm.querySelector<HTMLInputElement>('input[name="financeMode"]:checked')?.value || '';
+      if (common) common.hidden = !mode;
+      if (explainer) explainer.hidden = mode !== 'undecided';
+      if (shared) shared.hidden = mode !== 'undecided';
+      financeForm.querySelectorAll<HTMLElement>('[data-finance-branch]').forEach(branch => { branch.hidden = branch.dataset.financeBranch !== mode; });
+      financeForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[data-finance-common] input, [data-finance-common] select, [data-finance-common] textarea').forEach(input => {
+        input.disabled = !mode || Boolean(input.closest('[hidden]'));
+      });
+      if (amount) amount.max = mode === 'member' ? '50000' : '';
+      const language = financeForm.querySelector<HTMLSelectElement>('[name="preferredLanguage"]');
+      if (language && !language.dataset.initialized) { language.value = location.pathname.startsWith('/es/') ? 'es' : 'ca'; language.dataset.initialized='1'; }
+    };
+    modeInputs.forEach(radio => radio.addEventListener('change', update));
+    const es = financeForm.dataset.locale === 'es';
+    const status = financeForm.querySelector<HTMLElement>('.finance-error-summary');
+    const submit = financeForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const dialog = document.querySelector<HTMLDialogElement>('[data-finance-success]');
+    const closeDialog = dialog?.querySelector<HTMLButtonElement>('[data-finance-close]');
+    const formAccordion = financeForm.closest<HTMLDetailsElement>('.form-accordion');
+    let sending = false;
+
+    const feedbackText = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement): string => {
+      if (field.validity.valueMissing) return es ? 'Este campo es obligatorio.' : 'Aquest camp és obligatori.';
+      if (field.name === 'email' && (field.validity.typeMismatch || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()))) {
+        return es ? 'Introduce un correo válido, por ejemplo nombre@dominio.org.' : 'Introdueix un correu vàlid, per exemple nom@domini.org.';
+      }
+      if (field.name === 'amount' && field.validity.rangeUnderflow) return es ? 'El importe mínimo es 3.000 €.' : 'L’import mínim és de 3.000 €.';
+      if (field.name === 'amount' && field.validity.rangeOverflow) return es ? 'Para personas asociadas, el máximo es de 50.000 €.' : 'Per a persones associades, el màxim és de 50.000 €.';
+      if (field.name === 'amount' && field.validity.stepMismatch) return es ? 'Indica un importe múltiplo de 100 €.' : 'Indica un import múltiple de 100 €.';
+      if (field.validity.typeMismatch || field.validity.badInput) return es ? 'Revisa el formato de este campo.' : 'Revisa el format d’aquest camp.';
+      return es ? 'Revisa este campo.' : 'Revisa aquest camp.';
+    };
+
+    const clearFieldError = (field: HTMLElement) => {
+      field.removeAttribute('aria-invalid');
+      const label = field.closest('label');
+      const hint = label?.querySelector<HTMLElement>('.finance-field-error');
+      hint?.remove();
+    };
+    const markFieldError = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, message: string) => {
+      field.setAttribute('aria-invalid', 'true');
+      const label = field.closest('label');
+      if (label) {
+        let hint = label.querySelector<HTMLElement>('.finance-field-error');
+        if (!hint) {
+          hint = document.createElement('span');
+          hint.className = 'finance-field-error';
+          hint.setAttribute('role', 'alert');
+          label.append(hint);
+        }
+        hint.textContent = message;
+      }
+    };
+    const showSummary = (message: string) => {
+      if (!status) return;
+      status.textContent = message;
+      status.hidden = false;
+    };
+    const clearSummary = () => {
+      if (status) { status.hidden = true; status.textContent = ''; }
+    };
+    const focusField = (field: HTMLElement) => {
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      field.focus({ preventScroll: true });
+    };
+    const validate = () => {
+      let firstInvalid: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null = null;
+      const fields = Array.from(financeForm.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input,select,textarea'));
+      fields.forEach(field => clearFieldError(field));
+      clearSummary();
+      for (const field of fields) {
+        if (field.disabled || field.type === 'hidden' || field.name === 'cf-turnstile-response') continue;
+        if (field.name === 'financeMode') {
+          if (!financeForm.querySelector('input[name="financeMode"]:checked')) {
+            firstInvalid ||= field;
+            const group = field.closest('fieldset');
+            group?.classList.add('finance-group-invalid');
+          }
+          continue;
+        }
+        let invalid = !field.checkValidity();
+        // La validació nativa de type=email accepta algunes adreces sense domini final.
+        if (field.name === 'email' && field.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())) invalid = true;
+        if (invalid) {
+          markFieldError(field, feedbackText(field));
+          firstInvalid ||= field;
+        }
+      }
+      if (firstInvalid) {
+        showSummary(es ? 'Revisa los campos señalados en rojo antes de enviar.' : 'Revisa els camps marcats en roig abans d’enviar.');
+        focusField(firstInvalid);
+        return false;
+      }
+      return true;
+    };
+
+    financeForm.addEventListener('input', event => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) return;
+      clearFieldError(target);
+      clearSummary();
+    });
+    financeForm.addEventListener('change', event => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) return;
+      clearFieldError(target);
+      if (target.name === 'financeMode') financeForm.querySelector('.finance-mode-field')?.classList.remove('finance-group-invalid');
+      clearSummary();
+    });
+    // Tornar a l'inici només quan es tanca la confirmació, no abans.
+    const returnToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    closeDialog?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog?.addEventListener('close', returnToTop);
+
+    financeForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (sending || !submit || submit.disabled || !validate()) return;
+      const turnstileToken = financeForm.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value;
+      if (!turnstileToken) {
+        showSummary(es ? 'Completa la verificación antispam antes de enviar.' : 'Completa la verificació antispam abans d’enviar.');
+        financeForm.querySelector<HTMLElement>('.cf-turnstile')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      sending = true;
+      submit.disabled = true;
+      submit.textContent = es ? 'Enviando…' : 'Enviant…';
+      try {
+        const payload = Object.fromEntries(new FormData(financeForm).entries());
+        const response = await fetch('/api/financing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json() as { ok?: boolean; error?: string };
+        if (!response.ok || !result.ok) {
+          if (result.error === 'invalid_contact') {
+            const field = financeForm.querySelector<HTMLInputElement>('[name="email"]');
+            if (field) { markFieldError(field, es ? 'Comprueba el correo electrónico.' : 'Comprova el correu electrònic.'); focusField(field); }
+          }
+          if (result.error === 'invalid_amount') {
+            const field = financeForm.querySelector<HTMLInputElement>('[name="amount"]');
+            if (field) { markFieldError(field, es ? 'Revisa el importe indicado.' : 'Revisa l’import indicat.'); focusField(field); }
+          }
+          const errorMessages: Record<string, string> = es ? {
+            rate_limited: 'Has realizado demasiados intentos. Espera un minuto e inténtalo de nuevo.',
+            missing_verification: 'Completa la verificación antispam.',
+            verification_failed: 'La verificación ha caducado. Vuelve a comprobarla.',
+            invalid_contact: 'Revisa los datos de contacto marcados en rojo.',
+            invalid_amount: 'Revisa el importe marcado en rojo.',
+            missing_acknowledgement: 'Marca las dos casillas obligatorias.',
+          } : {
+            rate_limited: 'Has fet massa intents. Espera un minut i torna-ho a intentar.',
+            missing_verification: 'Completa la verificació antispam.',
+            verification_failed: 'La verificació ha caducat. Torna a comprovar-la.',
+            invalid_contact: 'Revisa les dades de contacte marcades en roig.',
+            invalid_amount: 'Revisa l’import marcat en roig.',
+            missing_acknowledgement: 'Marca les dues caselles obligatòries.',
+          };
+          showSummary(errorMessages[result.error || ''] || (es ? 'No se ha podido enviar la solicitud. Inténtalo de nuevo.' : 'No s’ha pogut enviar la sol·licitud. Torna-ho a intentar.'));
+          return;
+        }
+        // La referència queda guardada a D1, però no es mostra a la persona.
+        financeForm.reset();
+        update();
+        financeForm.querySelectorAll<HTMLElement>('[aria-invalid]').forEach(clearFieldError);
+        clearSummary();
+        if (formAccordion) formAccordion.open = false;
+        if (location.hash === '#form-financament') history.replaceState(null, '', location.pathname + location.search);
+        if (dialog?.showModal) dialog.showModal();
+        else {
+          alert(es ? 'Solicitud enviada con éxito. Nos pondremos en contacto contigo. No realices ninguna transferencia.' : 'Sol·licitud enviada amb èxit. Ens posarem en contacte amb tu. No faces cap transferència.');
+          returnToTop();
+        }
+      } catch {
+        showSummary(es ? 'No se ha podido conectar con el servidor. Inténtalo de nuevo.' : 'No s’ha pogut connectar amb el servidor. Torna-ho a intentar.');
+      } finally {
+        (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+        sending = false;
+        submit.disabled = false;
+        submit.textContent = es ? 'Enviar solicitud' : 'Enviar sol·licitud';
+      }
+    });
+    update();
+  }
+</script>
+
+
+<!-- Estils propis de les targetes: no cal modificar global.css. -->
+<style is:global>
+  .finance-form .finance-mode-field {
+    min-width: 0;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    border: 0;
+  }
+  .finance-form .finance-mode-field > legend {
+    float: left;
+    display: block;
+    width: 100%;
+    margin: 0 0 0.9rem;
+    padding: 0;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+  .finance-form .finance-mode-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    clear: both;
+  }
+  .finance-form .finance-mode-option {
+    position: relative;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+  }
+  .finance-form .finance-mode-option-wide {
+    grid-column: 1 / -1;
+  }
+  .finance-form .finance-mode-option > input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+  }
+  .finance-form .finance-mode-card {
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 104px;
+    height: 100%;
+    padding: 1.15rem 2.6rem 1.15rem 1rem;
+    border: 2px solid #79584A;
+    border-radius: 12px;
+    background: #F7F2ED;
+    color: #3B2A22;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .finance-form .finance-mode-card-title {
+    display: block;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .finance-form .finance-mode-card-detail {
+    display: block;
+    margin-top: .35rem;
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+  .finance-form .finance-mode-card-check {
+    position: absolute;
+    top: 50%;
+    right: .95rem;
+    transform: translateY(-50%);
+    display: none;
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .finance-form .finance-mode-option:hover .finance-mode-card {
+    border-color: #3B2A22;
+    background: #EADDD2;
+  }
+  .finance-form .finance-mode-option > input:checked + .finance-mode-card,
+  .finance-form .finance-mode-option:hover > input:checked + .finance-mode-card {
+    border-color: #3B2A22;
+    background: #3B2A22;
+    color: #FFFFFF;
+  }
+  .finance-form .finance-mode-option > input:checked + .finance-mode-card .finance-mode-card-check {
+    display: block;
+  }
+  .finance-form .finance-mode-option > input:focus-visible + .finance-mode-card {
+    outline: 3px solid #A55E3B;
+    outline-offset: 3px;
+  }
+  .finance-form .finance-mode-field.finance-group-invalid .finance-mode-card {
+    border-color: #B42318;
+  }
+  @media (max-width: 650px) {
+    .finance-form .finance-mode-options { grid-template-columns: 1fr; }
+    .finance-form .finance-mode-option-wide { grid-column: auto; }
+    .finance-form .finance-mode-card { min-height: 82px; }
+  }
+</style>
