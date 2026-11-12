@@ -806,7 +806,7 @@ html {scroll-padding-top:100px}
 /* Logotip més gran en mòbil */
 @media (max-width: 650px) {
   .site-header .brand img {
-    width: clamp(120px, 40vw, 125px);
+    width: clamp(140px, 40vw, 125px);
     height: auto;
     max-height: none;
   }
@@ -817,3 +817,27 @@ html {scroll-padding-top:100px}
   }
 }
 
+/* Títol principal un poc més menut */
+.hero h1 {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+}
+
+/* Ajust per a mòbil */
+@media (max-width: 650px) {
+  .hero h1 {
+    font-size: clamp(1.3rem, 5.5vw, 2rem);
+  }
+}
+
+/* Més separació entre el header i el títol principal */
+.hero {
+  padding-top: 45px;
+}
+
+/* Ajust per a mòbil */
+@media (max-width: 650px) {
+  .hero {
+    padding-top: 40px;
+
+  }
+}
