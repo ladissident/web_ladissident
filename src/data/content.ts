@@ -41,7 +41,7 @@ export const content = {
     faq:'Preguntes freqüents', faqItems:[
       ['Com puc aportar?','Pots fer una transferència directa amb les dades bancàries que publicarà la cooperativa una vegada validades.'],
       ['Puc demanar una tassa?','Sí, si has aportat almenys 50 €, pots sol·licitar-la per correu amb el justificant de la transferència.'],
-      ['Com funciona el finançament?','Pots sol·licitar informació sobre un préstec personal a V. Andrés Bertí o una aportació al capital social com a persona associada. No es formalitza res per la web.']
+      ['Com funciona el finançament?','Pots sol·licitar informació sobre un préstec personal a una de les persones impulsores de La Dissident o una aportació al capital social com a persona associada. No es formalitza res per la web.']
     ],
     shareTitle:'Ajuda’ns a difondre', shareCopy:'Encara que no pugues aportar diners, compartir aquesta campanya ens ajuda molt.', copied:'Enllaç copiat!',
     legal:'Avís legal', privacyLink:'Privacitat', cookies:'Cookies',
@@ -80,7 +80,7 @@ export const content = {
     faq:'Preguntas frecuentes', faqItems:[
       ['¿Cómo puedo aportar?','Puedes hacer una transferencia directa con los datos bancarios que publicará la cooperativa una vez validados.'],
       ['¿Puedo solicitar una taza?','Sí, si has aportado al menos 50 €, puedes solicitarla por correo con el justificante de la transferencia.'],
-      ['¿Cómo funciona la financiación?','Puedes solicitar información sobre un préstamo personal a V. Andrés Bertí o una aportación al capital social como persona asociada. Nada se formaliza en la web.']
+      ['¿Cómo funciona la financiación?','Puedes solicitar información sobre un préstamo personal a una de las personas impulsoras de La Dissident o una aportación al capital social como persona asociada. Nada se formaliza en la web.']
     ],
     shareTitle:'Ayúdanos a difundir', shareCopy:'Aunque no puedas aportar dinero, compartir esta campaña nos ayuda mucho.', copied:'¡Enlace copiado!',
     legal:'Aviso legal', privacyLink:'Privacidad', cookies:'Cookies',

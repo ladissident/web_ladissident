@@ -568,3 +568,176 @@ html {scroll-padding-top:100px}
   margin: 12px auto 0px;
 }
 
+/* Contacte igual que els altres enllaços del header */
+.site-header .desktop-nav .contact-nav-trigger {
+  appearance: none;
+  font-family: 'Source Sans 3', Arial, sans-serif;
+  font-size: 0.89rem;
+  font-weight: 600;
+  line-height: inherit;
+
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Mateix efecte en passar el ratolí */
+.site-header .desktop-nav .contact-nav-trigger:hover {
+  text-decoration: none;
+}
+    .contact-hero-trigger {
+      background: transparent;
+      color: #3b2a22;
+      border: 2px solid #3b2a22;
+      cursor: pointer;
+    }
+    .contact-hero-trigger:hover { background: #3b2a22; color: #fff; }
+    .contact-dialog {
+      width: min(520px, calc(100% - 32px));
+      max-height: min(90dvh, 760px);
+      overflow-y: auto;
+      margin: auto;
+      border: 0;
+      border-radius: 16px;
+      padding: 0;
+      background: #f9f4ee;
+      color: #3b2a22;
+      box-shadow: 0 15px 55px #0004;
+    }
+    .contact-dialog::backdrop { background: rgb(20 13 9 / 65%); }
+    .contact-dialog-inner { position: relative; padding: clamp(22px, 5vw, 34px); }
+    .contact-dialog h2 { margin: 0 42px 12px 0; color: #3b2a22; }
+    .contact-dialog h3 { margin: 0 0 8px; color: #3b2a22; font-size: 1.1rem; }
+    .contact-dialog p { line-height: 1.5; }
+/* X del pop-up de contacte */
+.contact-dialog .contact-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  color: #3b2a22;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+/* En passar el ratolí: només canvia el color */
+.contact-dialog .contact-close:hover {
+  background: transparent;
+  box-shadow: none;
+  color: #a55e3b;
+}
+    .contact-option { border: 1px solid #c5b4a5; border-radius: 12px; padding: 18px; margin-top: 18px; }
+    .contact-option p { margin: 0 0 12px; }
+    .contact-email-address { overflow-wrap: anywhere; }
+    .contact-option-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+/* Botons de contacte: tots marrons i sense vora */
+.contact-action-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 11px 20px;
+  background: #3b2a22;
+  color: #f4eddf;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Mateixa tipografia que els botons de la web */
+/* Mateixa tipografia que els botons originals de La Dissident */
+.contact-action-primary,
+.contact-action-primary span {
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+
+    .contact-copy-status:empty { display: none; }
+    .contact-dialog :is(button,a):focus-visible, .contact-hero-trigger:focus-visible, .contact-nav-trigger:focus-visible {
+      outline: 3px solid #ab493b; outline-offset: 4px;
+    }
+    @media (max-width: 650px) {
+      .hero .actions { flex-wrap: wrap; }
+      .contact-dialog-inner { padding: 22px 18px; }
+      .contact-option { padding: 14px; }
+    }
+    
+    /* Inicialment només es mostra la icona de copiar */
+.contact-icon-check {
+  display: none;
+}
+
+/* Quan es copia, apareix el tic */
+.contact-copy-success .contact-icon-copy {
+  display: none;
+}
+
+.contact-copy-success .contact-icon-check {
+  display: block;
+}
+
+/* Ocultar visualment la confirmació, però mantindre-la accessible */
+.contact-copy-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+/* Ocultar la confirmació visualment */
+.contact-copy-status:not(.contact-copy-error) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mateix hover per als dos botons del contacte */
+.contact-dialog .contact-action-primary:hover {
+  background-color: #634739;
+  color: #f4eddf;
+  border-color: transparent;
+  text-decoration: none;
+  filter: none;
+}
+.contact-dialog .contact-action-primary {
+  transition: background-color 0.2s ease;
+}
+
