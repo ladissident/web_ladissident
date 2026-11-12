@@ -47,7 +47,7 @@ const donationsEnabled = false;
         <div class="actions">
           <a class="btn" href="#participa">{t.participate}</a>
           <a class="btn btn-outline" href="#video-section">{t.watch}</a>
-          <button type="button" class="btn contact-hero-trigger" data-open-contact>{locale === 'ca' ? 'Contacte' : 'Contacto'}</button>
+
         </div>
         <div class="progress-card">
           <div class="progress-labels"><strong>{money(campaign.demoRaised)} {t.achieved}</strong><strong>{percent}%</strong></div>
@@ -57,6 +57,7 @@ const donationsEnabled = false;
           <div class="progress-labels minor"><span>{money(Math.max(0,campaign.goal-campaign.demoRaised))} {t.missing}</span><span>{t.updated} {campaign.demoUpdated.split('-').reverse().join('/')}</span></div>
         </div>
       </div>
+      
     </section>
 
     <section class="section" id="projecte">

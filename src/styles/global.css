@@ -741,3 +741,79 @@ html {scroll-padding-top:100px}
   transition: background-color 0.2s ease;
 }
 
+/* Contacte igual que els altres enllaços del menú mòbil */
+@media (max-width: 650px) {
+  .site-header .mobile-menu nav .contact-nav-trigger {
+    display: block;
+    width: 100%;
+    padding: 11px 10px;
+    margin: 0;
+
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+
+    color: inherit;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 0.87rem;
+    font-weight: 600;
+    line-height: inherit;
+
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .site-header .mobile-menu nav .contact-nav-trigger:hover {
+    background: #f4eddf;
+    text-decoration: none;
+  }
+}
+
+/* Estat normal del botó de copiar */
+.contact-dialog button[data-copy-contact] {
+  background-color: #3b2a22;
+  color: #f4eddf;
+  transition: background-color 0.2s ease;
+}
+
+/* Mentre es mostra el tic: color de hover */
+.contact-dialog button[data-copy-contact].contact-copy-success {
+  background-color: #634739;
+  color: #f4eddf;
+}
+
+/* En dispositius tàctils, evitar que el hover quede enganxat */
+@media (hover: none) {
+  .contact-dialog button[data-copy-contact]:hover:not(.contact-copy-success) {
+    background-color: #3b2a22;
+    color: #f4eddf;
+  }
+}
+
+/* Logotip més gran en ordinador */
+.site-header .brand img {
+  width: 200px;
+  height: auto;
+  max-height: none;
+}
+
+.site-footer .footer-brand img {
+  width: 195px;
+  height: auto;
+}
+
+/* Logotip més gran en mòbil */
+@media (max-width: 650px) {
+  .site-header .brand img {
+    width: clamp(120px, 40vw, 125px);
+    height: auto;
+    max-height: none;
+  }
+
+  .site-footer .footer-brand img {
+    width: 120px;
+    height: auto;
+  }
+}
+
