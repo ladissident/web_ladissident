@@ -4,18 +4,18 @@ const ca = locale === 'ca';
 const L = (val: string, es: string) => ca ? val : es;
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''; 
 const explanation = ca ? [
-  { title:'Opció 1. Préstec personal a V. Andrés Bertí', paragraphs:[
-    'Prestaràs els diners directament a V. Andrés Bertí, que serà l’únic deutor i respondrà personalment de la devolució. La Dissident no serà prestatària, avaladora ni garant; l’immoble tampoc no garantirà el préstec.',
-    'Pot interessar-te si no vols mantindre una relació societària, prefereixes un contracte individual o necessites començar a recuperar els diners abans d’un any. Hi ha dos mesos inicials de carència fora del termini de devolució, que pot arribar a deu anys.',
-    'Podràs indicar import, termini, urgència, carència voluntària i periodicitat. Abans de transferir rebràs fitxa informativa, simulació, riscos, contracte, calendari i informació fiscal i sobre el model 600.',
-    'Al 0 % recuperes el mateix import nominal, sense interessos. El risc principal és la solvència personal de V. Andrés Bertí: la cooperativa i l’immoble no responen del préstec.'
-  ]},
-  { title:'Opció 2. Persona associada i capital social', paragraphs:[
+  { title:'Opció 1. Persona associada i aportació voluntària al capital social (recomanada)', paragraphs:[
     'Sol·licitaràs l’admissió com a persona associada i faràs una aportació voluntària al capital social de La Dissident. La cooperativa assumirà el reembossament segons l’acord d’emissió. No és un préstec ordinari.',
     'Pot interessar-te si vols finançar directament la cooperativa, mantindre una relació societària i pots deixar els diners almenys un any. Ser persona associada no implica ser habitant ni tindre dret d’ús o propietat individual. Pots assistir a l’Assemblea amb veu, però sense vot, i no formar part del Consell Rector.',
-    'Import previst: mínim 3.000 € i màxim 50.000 € per persona. Remuneració al 0 %, sense interessos ni IPC. No podrà haver-hi reembossaments durant el primer any després de subscriure i desembossar. Després es preveu devolució ordinàriament mensual, en un màxim de deu anys des del desembossament.',
+    'Import previst: mínim 3.000 € i màxim 50.000 € per persona. Pots sol·licitar informació sobre l’aportació al 0 % o la compensació vinculada a l’IPC, limitada a un màxim del 3 % anual i aplicable després del primer any. No hi haurà reembossaments durant el primer any després de subscriure i desembossar. Després es preveu devolució ordinàriament mensual, en un màxim de deu anys des del desembossament.',
     'Abans de transferir rebràs informació sobre la condició de persona associada, estatuts, acord d’emissió, riscos, resolució del Consell Rector, document de subscripció i calendari. L’admissió requereix aprovació del Consell Rector i pots rebutjar les condicions finals.',
     'El capital social té menys liquiditat que un préstec ordinari. No està cobert pel Fons de Garantia de Depòsits, l’immoble no el garanteix automàticament i el reembossament depén de l’acord, la normativa i la situació econòmica de la cooperativa.'
+  ]},
+  { title:'Opció 2. Préstec personal a una persona impulsora de La Dissident', paragraphs:[
+    'El préstec es formalitzarà individualment amb una de les persones impulsores de La Dissident. Abans de firmar informarem de qui serà la persona prestatària i responsable exclusiva de la devolució. La Dissident no serà deutora ni garant. L’immoble tampoc no garantirà el préstec.',
+    'Pot interessar-te si no vols mantindre una relació societària, prefereixes un contracte individual o necessites començar a recuperar els diners abans d’un any. Hi ha dos mesos inicials de carència fora del termini de devolució, que pot arribar a deu anys.',
+    'Podràs indicar import, termini, urgència, carència voluntària i periodicitat. Abans de transferir rebràs fitxa informativa, simulació, riscos, contracte, calendari i informació fiscal i sobre el model 600.',
+    'Al 0 % recuperes el mateix import nominal, sense interessos. El risc principal és la solvència de la persona impulsora que assumisca el préstec: la cooperativa i l’immoble no en responen.'
   ]},
   { title:'Quina opció pot convindre’t més?', paragraphs:[
     'Persona associada: si pots mantindre els diners almenys un any, vols finançar directament la cooperativa i prefereixes un acord col·lectiu.',
@@ -23,18 +23,18 @@ const explanation = ca ? [
     'Si encara no ho tens clar, no cal decidir ara. Indica les teues necessitats i rebràs una comparació adaptada. Emplenar el formulari no formalitza cap operació ni autoritza transferències.'
   ]}
 ] : [
-  { title:'Opción 1. Préstamo personal a V. Andrés Bertí', paragraphs:[
-    'Prestarás dinero directamente a V. Andrés Bertí, que será el único deudor y responderá personalmente de su devolución. La Dissident no será prestataria, avalista ni garante; el inmueble tampoco garantizará el préstamo.',
-    'Puede interesarte si no quieres relación societaria, prefieres un contrato individual o necesitas recuperar dinero antes de un año. Hay dos meses iniciales de carencia, fuera del plazo posterior de devolución de hasta diez años.',
-    'Podrás indicar importe, plazo, urgencia, carencia voluntaria y periodicidad. Antes de transferir recibirás ficha informativa, simulación, riesgos, contrato, calendario e información fiscal y del modelo 600.',
-    'Al 0 % recuperas el mismo importe nominal, sin intereses. El principal riesgo es la solvencia personal de V. Andrés Bertí: la cooperativa y el inmueble no responden del préstamo.'
-  ]},
-  { title:'Opción 2. Persona asociada y capital social', paragraphs:[
+  { title:'Opción 1. Persona asociada y aportación voluntaria al capital social (recomendada)', paragraphs:[
     'Solicitarás tu admisión como persona asociada y una aportación voluntaria al capital social de La Dissident. La cooperativa asumirá el reembolso según el acuerdo de emisión. No es un préstamo ordinario.',
     'Puede interesarte si quieres financiar directamente a la cooperativa, mantener una relación societaria y puedes aportar durante al menos un año. Ser persona asociada no equivale a ser habitante ni concede derecho de uso o propiedad individual. Puedes asistir a la Asamblea con voz, pero sin voto, y no formar parte del Consejo Rector.',
-    'Importe previsto: entre 3.000 € y 50.000 € por persona. Remuneración al 0 %, sin intereses ni IPC. No podrá reembolsarse durante el primer año desde la suscripción y el desembolso. Después se prevé devolución ordinariamente mensual, con plazo máximo total de diez años desde el desembolso.',
+    'Importe previsto: entre 3.000 € y 50.000 € por persona. Puedes solicitar información sobre la aportación al 0 % o la compensación vinculada al IPC, limitada a un máximo del 3 % anual y aplicable después del primer año. No habrá reembolsos durante el primer año desde la suscripción y el desembolso. Después se prevé devolución ordinariamente mensual, con un plazo máximo total de diez años desde el desembolso.',
     'Antes de transferir recibirás información sobre la condición de persona asociada, estatutos, acuerdo de emisión, riesgos, resolución del Consejo Rector, documento de suscripción y calendario. La admisión requiere aprobación del Consejo Rector y podrás rechazar las condiciones finales.',
     'El capital social tiene menos liquidez que un préstamo ordinario. No está cubierto por el Fondo de Garantía de Depósitos, el inmueble no lo garantiza automáticamente y el reembolso depende del acuerdo, la normativa y la situación económica de la cooperativa.'
+  ]},
+  { title:'Opción 2. Préstamo personal a una persona impulsora de La Dissident', paragraphs:[
+    'El préstamo se formalizará individualmente con una de las personas impulsoras de La Dissident. Antes de firmar informaremos de quién será la persona prestataria y responsable exclusiva de la devolución. La Dissident no será deudora ni garante. El inmueble tampoco garantizará el préstamo.',
+    'Puede interesarte si no quieres relación societaria, prefieres un contrato individual o necesitas recuperar dinero antes de un año. Hay dos meses iniciales de carencia, fuera del plazo posterior de devolución de hasta diez años.',
+    'Podrás indicar importe, plazo, urgencia, carencia voluntaria y periodicidad. Antes de transferir recibirás ficha informativa, simulación, riesgos, contrato, calendario e información fiscal y del modelo 600.',
+    'Al 0 % recuperas el mismo importe nominal, sin intereses. El riesgo principal es la solvencia de la persona impulsora que asuma el préstamo: la cooperativa y el inmueble no responden de él.'
   ]},
   { title:'¿Qué opción puede convenirte más?', paragraphs:[
     'Persona asociada: si puedes mantener el dinero al menos un año, quieres financiar directamente a la cooperativa y prefieres un acuerdo colectivo.',
@@ -51,27 +51,26 @@ const explanation = ca ? [
         <legend>{L('Quina modalitat t’interessa?','¿Qué modalidad te interesa?')}</legend>
         <div class="finance-mode-options">
           <label class="finance-mode-option">
-            <input type="radio" name="financeMode" value="loan" required/>
+            <input type="radio" name="financeMode" value="member" required/>
             <span class="finance-mode-card">
-              <span class="finance-mode-card-title">{L('Préstec personal','Préstamo personal')}</span>
-              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
+              <span class="finance-recommended-badge">{L('OPCIÓ RECOMANADA','OPCIÓN RECOMENDADA')}</span>
+              <span class="finance-mode-card-title">{L('Persona associada i aportació voluntària al capital social','Persona asociada y aportación voluntaria al capital social')}</span>
             </span>
           </label>
           <label class="finance-mode-option">
-            <input type="radio" name="financeMode" value="member"/>
+            <input type="radio" name="financeMode" value="loan"/>
             <span class="finance-mode-card">
-              <span class="finance-mode-card-title">{L('Persona associada','Persona asociada')}</span>
-              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
+              <span class="finance-mode-card-title">{L('Préstec personal','Préstamo personal')}</span>
             </span>
           </label>
           <label class="finance-mode-option">
             <input type="radio" name="financeMode" value="undecided"/>
             <span class="finance-mode-card">
               <span class="finance-mode-card-title">{L('Encara no ho tinc clar','Todavía no lo tengo claro')}</span>
-              <span class="finance-mode-card-check" aria-hidden="true">✓</span>
             </span>
           </label>
         </div>
+        <p class="finance-recommended-explainer">{L('Si pots mantindre els diners almenys un any, preferim aquesta modalitat perquè els recursos entren directament en La Dissident i el reemborsament queda regulat per un acord aprovat col·lectivament.','Si puedes mantener el dinero al menos un año, preferimos esta modalidad porque los recursos entran directamente en La Dissident y el reembolso queda regulado por un acuerdo aprobado colectivamente.')}</p>
         <p class="muted finance-mode-note">{L('Aquest formulari només recull preferències. No formalitza cap operació ni autoritza transferències.','Este formulario solo recoge preferencias. No formaliza ninguna operación ni autoriza transferencias.')}</p>
       </fieldset>
       <div class="finance-explainer inset-panel" data-finance-explainer hidden>
@@ -84,8 +83,8 @@ const explanation = ca ? [
             {index === 2 && (
         <div class="finance-comparison"><h4>{L('Comparació ràpida','Comparación rápida')}</h4>
           <div class="finance-table-scroll"><table><thead><tr><th>{L('Aspecte','Aspecto')}</th><th>{L('Préstec personal','Préstamo personal')}</th><th>{L('Persona associada','Persona asociada')}</th></tr></thead><tbody>
-          <tr><th>{L('Rep els diners','Recibe el dinero')}</th><td>V. Andrés Bertí</td><td>La Dissident</td></tr>
-          <tr><th>{L('Responsable','Responsable')}</th><td>V. Andrés Bertí</td><td>{L('Cooperativa segons emissió','Cooperativa según emisión')}</td></tr>
+          <tr><th>{L('Rep els diners','Recibe el dinero')}</th><td>{L('Una persona impulsora de La Dissident','Una persona impulsora de La Dissident')}</td><td>La Dissident</td></tr>
+          <tr><th>{L('Responsable','Responsable')}</th><td>{L('Una persona impulsora de La Dissident','Una persona impulsora de La Dissident')}</td><td>{L('Cooperativa segons emissió','Cooperativa según emisión')}</td></tr>
           <tr><th>{L('Primera devolució','Primer reembolso')}</th><td>{L('Després de 2 mesos','Después de 2 meses')}</td><td>{L('No abans d’1 any','No antes de 1 año')}</td></tr>
           <tr><th>{L('Termini màxim','Plazo máximo')}</th><td>{L('10 anys després de la carència','10 años tras la carencia')}</td><td>{L('10 anys des del desembossament','10 años desde el desembolso')}</td></tr>
           <tr><th>{L('Relació societària','Relación societaria')}</th><td>{L('No','No')}</td><td>{L('Sí, sense vot ni dret d’ús','Sí, sin voto ni derecho de uso')}</td></tr>
@@ -110,7 +109,7 @@ const explanation = ca ? [
         <p class="muted">{L('La quantitat és orientativa i no et compromet. No es demanen dades bancàries ni documents d’identitat.','La cantidad es orientativa y no te compromete. No se piden datos bancarios ni documentos de identidad.')}</p>
         <div class="finance-branch inset-panel" data-finance-branch="loan" hidden>
           <h3>{L('Preferències del préstec personal','Preferencias del préstamo personal')}</h3>
-          <p>{L('V. Andrés Bertí és l’únic deutor i respon amb el patrimoni personal. La cooperativa i l’immoble no garanteixen el préstec. Dos mesos de carència inicial i fins a deu anys posteriors de devolució, sense penalització per amortització anticipada.','V. Andrés Bertí es el único deudor y responde con su patrimonio personal. La cooperativa y el inmueble no garantizan el préstamo. Dos meses de carencia inicial y hasta diez años posteriores de devolución, sin penalización por amortización anticipada.')}</p>
+          <p>{L('El préstec es formalitzarà individualment amb una de les persones impulsores de La Dissident. Abans de firmar informarem de qui serà la persona prestatària i responsable exclusiva de la devolució. La Dissident no serà deutora ni garant. Dos mesos de carència inicial i fins a deu anys posteriors de devolució, sense penalització per amortització anticipada.','El préstamo se formalizará individualmente con una de las personas impulsoras de La Dissident. Antes de firmar informaremos de quién será la persona prestataria y responsable exclusiva de la devolución. La Dissident no será deudora ni garante. Dos meses de carencia inicial y hasta diez años posteriores de devolución, sin penalización por amortización anticipada.')}</p>
           <label>{L('Modalitat preferida','Modalidad preferida')}<select name="loanRemuneration" disabled><option value="zero">{L('Préstec al 0 %','Préstamo al 0 %')}</option><option value="ipc">{L('Actualització vinculada a l’IPC','Actualización vinculada al IPC')}</option><option value="both">{L('Vull conéixer les dues','Quiero conocer ambas')}</option></select></label>
           <div class="two-cols"><label>{L('En quants anys preferiries recuperar el préstec?','¿En cuántos años preferirías recuperar el préstamo?')}<select name="loanYears" disabled>{['1','2','3','5','7','10'].map(n=><option value={n}>{n}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option><option value="discuss">{L('Vull parlar-ne','Quiero hablarlo')}</option></select></label>
           <label>{L('Periodicitat preferida','Periodicidad preferida')}<select name="loanFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="semiannual">{L('Semestral','Semestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label></div>
@@ -119,7 +118,16 @@ const explanation = ca ? [
         </div>
         <div class="finance-branch inset-panel" data-finance-branch="member" hidden>
           <h3>{L('Preferències de la persona associada','Preferencias de la persona asociada')}</h3>
-          <p>{L('Aportació voluntària al capital social entre 3.000 € i 50.000 €, al 0 % i sense IPC. Cal admissió del Consell Rector. No hi ha dret d’ús ni vot. El capital no es reembossa abans d’un any i el termini màxim previst és de deu anys des del desembossament.','Aportación voluntaria al capital social entre 3.000 € y 50.000 €, al 0 % y sin IPC. Requiere admisión del Consejo Rector. No concede derecho de uso ni voto. No se reembolsa antes de un año y el plazo máximo previsto es de diez años desde el desembolso.')}</p>
+          <p>{L('Aportació voluntària al capital social entre 3.000 € i 50.000 €. Pots conéixer l’opció al 0 % i la compensació limitada segons IPC (màxim del 3 % anual, després del primer any). Cal admissió del Consell Rector i la documentació corresponent. No hi ha dret d’ús ni vot. El capital no es reembossa abans d’un any i el termini màxim previst és de deu anys des del desembossament.','Aportación voluntaria al capital social entre 3.000 € y 50.000 €. Puedes conocer la opción al 0 % y la compensación limitada según IPC (máximo del 3 % anual, después del primer año). Se requiere admisión del Consejo Rector y la documentación correspondiente. No concede derecho de uso ni voto. No se reembolsa antes de un año y el plazo máximo previsto es de diez años desde el desembolso.')}</p>
+          <label>{L('Quina modalitat voldries conéixer?','¿Qué modalidad te gustaría conocer?')}
+            <select name="memberRemuneration" required disabled>
+              <option value="">{L('Selecciona una opció','Selecciona una opción')}</option>
+              <option value="zero">{L('Aportació al 0 %','Aportación al 0 %')}</option>
+              <option value="ipc">{L('Aportació amb compensació limitada segons IPC','Aportación con compensación limitada según IPC')}</option>
+              <option value="both">{L('Vull comparar les dues','Quiero comparar ambas')}</option>
+            </select>
+          </label>
+          <p class="muted finance-member-ipc-note">{L('La compensació per IPC tindrà un màxim del 3 % anual i començarà després del primer any. Les condicions definitives es documentaran abans de formalitzar l’aportació.','La compensación por IPC tendrá un máximo del 3 % anual y comenzará después del primer año. Las condiciones definitivas se documentarán antes de formalizar la aportación.')}</p>
           <div class="two-cols"><label>{L('Termini preferit de recuperació','Plazo preferido de recuperación')}<select name="memberYears" disabled>{['2','3','5','7','10'].map(n=><option value={n}>{n}</option>)}<option value="none">{L('Sense preferència','Sin preferencia')}</option></select></label>
           <label>{L('Preferència de reembossament','Preferencia de reembolso')}<select name="memberFrequency" disabled><option value="monthly">{L('Mensual','Mensual')}</option><option value="quarterly">{L('Trimestral','Trimestral')}</option><option value="annual">{L('Anual','Anual')}</option><option value="maturity">{L('Al venciment','Al vencimiento')}</option><option value="flexible">{L('Flexible segons liquiditat','Flexible según liquidez')}</option></select></label></div>
           <label>{L('Necessites prioritat?','¿Necesitas prioridad?')}<select name="memberPriority" disabled><option value="short">{L('Necessite un termini curt','Necesito un plazo corto')}</option><option value="medium">{L('Puc acceptar un termini intermedi','Puedo aceptar un plazo intermedio')}</option><option value="long">{L('Puc acceptar una permanència llarga','Puedo aceptar una permanencia larga')}</option><option value="explain">{L('Vull explicar-ho','Quiero explicarlo')}</option></select></label>
@@ -314,6 +322,7 @@ const explanation = ca ? [
             verification_failed: 'La verificación ha caducado. Vuelve a comprobarla.',
             invalid_contact: 'Revisa los datos de contacto marcados en rojo.',
             invalid_amount: 'Revisa el importe marcado en rojo.',
+            invalid_preference_memberRemuneration: 'Selecciona una modalidad económica para la persona asociada.',
             missing_acknowledgement: 'Marca las dos casillas obligatorias.',
           } : {
             rate_limited: 'Has fet massa intents. Espera un minut i torna-ho a intentar.',
@@ -321,6 +330,7 @@ const explanation = ca ? [
             verification_failed: 'La verificació ha caducat. Torna a comprovar-la.',
             invalid_contact: 'Revisa les dades de contacte marcades en roig.',
             invalid_amount: 'Revisa l’import marcat en roig.',
+            invalid_preference_memberRemuneration: 'Selecciona una modalitat econòmica per a la persona associada.',
             missing_acknowledgement: 'Marca les dues caselles obligatòries.',
           };
           showSummary(errorMessages[result.error || ''] || (es ? 'No se ha podido enviar la solicitud. Inténtalo de nuevo.' : 'No s’ha pogut enviar la sol·licitud. Torna-ho a intentar.'));
@@ -350,106 +360,3 @@ const explanation = ca ? [
     update();
   }
 </script>
-
-
-<!-- Estils propis de les targetes: no cal modificar global.css. -->
-<style is:global>
-  .finance-form .finance-mode-field {
-    min-width: 0;
-    margin: 0 0 1.5rem;
-    padding: 0;
-    border: 0;
-  }
-  .finance-form .finance-mode-field > legend {
-    float: left;
-    display: block;
-    width: 100%;
-    margin: 0 0 0.9rem;
-    padding: 0;
-    font-weight: 700;
-    line-height: 1.45;
-  }
-  .finance-form .finance-mode-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    clear: both;
-  }
-  .finance-form .finance-mode-option {
-    position: relative;
-    display: block;
-    margin: 0;
-    cursor: pointer;
-  }
-  .finance-form .finance-mode-option > input[type="radio"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
-  }
-  .finance-form .finance-mode-card {
-    box-sizing: border-box;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    min-height: 64px;
-    height: 100%;
-    padding: .75rem 1.75rem;
-    border: 2px solid #79584A;
-    border-radius: 12px;
-    background: #F7F2ED;
-    color: #3B2A22;
-    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
-  }
-  .finance-form .finance-mode-card-title {
-    display: block;
-    font-weight: 700;
-    line-height: 1.35;
-  }
-  .finance-form .finance-mode-card-detail {
-    display: block;
-    margin-top: .35rem;
-    font-size: .9rem;
-    line-height: 1.4;
-  }
-  .finance-form .finance-mode-card-check {
-    position: absolute;
-    top: 50%;
-    right: .55rem;
-    transform: translateY(-50%);
-    display: none;
-    font-size: 1.35rem;
-    font-weight: 700;
-  }
-  .finance-form .finance-mode-option:hover .finance-mode-card {
-    border-color: #3B2A22;
-    background: #EADDD2;
-  }
-  .finance-form .finance-mode-option > input:checked + .finance-mode-card,
-  .finance-form .finance-mode-option:hover > input:checked + .finance-mode-card {
-    border-color: #3B2A22;
-    background: #3B2A22;
-    color: #FFFFFF;
-  }
-  .finance-form .finance-mode-option > input:checked + .finance-mode-card .finance-mode-card-check {
-    display: block;
-  }
-  .finance-form .finance-mode-option > input:focus-visible + .finance-mode-card {
-    outline: 3px solid #A55E3B;
-    outline-offset: 3px;
-  }
-  .finance-form .finance-mode-field.finance-group-invalid .finance-mode-card {
-    border-color: #B42318;
-  }
-  .finance-form .finance-mode-note {
-    margin: .9rem 0 0;
-  }
-  @media (max-width: 650px) {
-    .finance-form .finance-mode-options { grid-template-columns: 1fr; }
-    .finance-form .finance-mode-card { min-height: 58px; }
-  }
-</style>

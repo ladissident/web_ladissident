@@ -859,3 +859,119 @@ html {scroll-padding-top:100px}
   }
 }
 
+
+
+/* Formulari de finançament: targetes i opció recomanada (traslladat de Financing.astro) */
+
+  .finance-form .finance-mode-field {
+    min-width: 0;
+    margin: 0 0 1.5rem;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent;
+  }
+  .finance-form .finance-mode-field > legend {
+    float: left;
+    display: block;
+    width: 100%;
+    margin: 0 0 0.9rem;
+    padding: 0;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+  .finance-form .finance-mode-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    clear: both;
+  }
+  .finance-form .finance-mode-option {
+    position: relative;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+  }
+  .finance-form .finance-mode-option > input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+  }
+  .finance-form .finance-mode-card {
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 64px;
+    height: 100%;
+    padding: .75rem 1rem;
+    border: 2px solid #79584A;
+    border-radius: 12px;
+    background: #F7F2ED;
+    color: #3B2A22;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .finance-form .finance-mode-card-title {
+    display: block;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .finance-form .finance-mode-card-detail {
+    display: block;
+    margin-top: .35rem;
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+  .finance-form .finance-mode-option:hover .finance-mode-card {
+    border-color: #3B2A22;
+    background: #EADDD2;
+  }
+  .finance-form .finance-mode-option > input:checked + .finance-mode-card,
+  .finance-form .finance-mode-option:hover > input:checked + .finance-mode-card {
+    border-color: #3B2A22;
+    background: #3B2A22;
+    color: #FFFFFF;
+  }
+  .finance-form .finance-mode-option > input:focus-visible + .finance-mode-card {
+    outline: 3px solid #A55E3B;
+    outline-offset: 3px;
+  }
+  .finance-form .finance-mode-field.finance-group-invalid .finance-mode-card {
+    border-color: #B42318;
+  }
+  .finance-form .finance-mode-note {
+    margin: .9rem 0 0;
+  }
+  @media (max-width: 650px) {
+    .finance-form .finance-mode-options { grid-template-columns: 1fr; }
+    .finance-form .finance-mode-card { min-height: 58px; }
+  }
+
+  /* Primera opció recomanada, sense marcar-la automàticament */
+  .finance-form .finance-recommended-badge {
+    display: block;
+    margin-bottom: .25rem;
+    font-family: Manrope, Arial, sans-serif;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .035em;
+    color: #9b4934;
+  }
+  .finance-form .finance-mode-option > input:checked + .finance-mode-card .finance-recommended-badge { color: #f7d8c0; }
+  .finance-form .finance-recommended-explainer { font-size: .86rem; line-height: 1.55; margin: 1rem 0 .3rem; color: #3b2a22; }
+  .finance-form .finance-member-ipc-note { margin: 6px 0 16px; }
+  .finance-form .finance-mode-field.finance-group-invalid { border: 2px solid #B42318 !important; border-radius: 10px; }
+
+/* Modalitat recomanada en les targetes de la portada */
+.finance-choices .choice-recommended { border-color: #a55e3b; }
+.finance-choices .choice-recommended-label {
+  display: inline-block; align-self: flex-start;
+  margin: 12px 0 0; padding: 5px 9px;
+  border-radius: 5px; background: #a55e3b; color: #fff9f0;
+  font-family: Manrope, Arial, sans-serif; font-weight: 700;
+  font-size: .68rem; letter-spacing: .025em;
+}

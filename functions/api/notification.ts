@@ -21,6 +21,7 @@ const modeLabels: Record<NotificationData['mode'], string> = {
 };
 
 const maps: Record<string, Record<string, string>> = {
+  memberRemuneration: {zero:'Aportació al 0 %',ipc:'Compensació limitada segons IPC (màxim 3 % anual, a partir del segon any)',both:'Vol comparar les dues modalitats'},
   loanYears: {'1':'1 any','2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència',discuss:'Vol parlar-ne'},
   memberYears: {'2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència'},
   preferredYears: {'1':'1 any','2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència'},
@@ -51,6 +52,7 @@ export function createNotification(data: NotificationData): { subject: string; t
     `Codi de sol·licitud: ${data.code}`,
     `Data i hora (peninsular): ${date}`,
     `Modalitat: ${modeLabels[data.mode]}`,
+    ...(data.mode === 'member' ? [`Modalitat econòmica de persona associada: ${field(data.preferences, 'memberRemuneration')}`] : []),
     `Nom i cognoms: ${oneLine(data.fullName)}`,
     `Correu: ${oneLine(data.email)}`,
     `Telèfon: ${oneLine(clean(data.phone))}`,

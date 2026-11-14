@@ -3,7 +3,7 @@ interface Env { DB: D1Database; TURNSTILE_SECRET_KEY: string; RESEND_API_KEY?: s
 type Context = { request: Request; env: Env };
 const allowed = {
   loan: { loanRemuneration:['zero','ipc','both'], loanYears:['1','2','3','5','7','10','none','discuss'], loanFrequency:['monthly','quarterly','semiannual','annual','none'], loanGrace:['2','6','12','24','more','discuss'], loanFlexibility:['fixed','early','small','flexible','discuss'] },
-  member: { memberYears:['2','3','5','7','10','none'], memberFrequency:['monthly','quarterly','annual','maturity','flexible'], memberPriority:['short','medium','long','explain'] },
+  member: { memberRemuneration:['zero','ipc','both'], memberYears:['2','3','5','7','10','none'], memberFrequency:['monthly','quarterly','annual','maturity','flexible'], memberPriority:['short','medium','long','explain'] },
   undecided: { needStart:['2months','1year','later','unsure'], preferredYears:['1','2','3','5','7','10','none'], preferredGrace:['none','6','12','24','more'], preferredFrequency:['monthly','quarterly','semiannual','annual','none'] }
 } as const;
 const reject = (error:string, status=400) => Response.json({ok:false,error},{status,headers:{'Cache-Control':'no-store'}});

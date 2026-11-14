@@ -1,0 +1,861 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+:root{font-family:'Source Sans 3',Arial,sans-serif;color:#24231f;background:#f4eddf;font-size:18px;line-height:1.55;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}h1,h2,h3,.brand,.btn{font-family:Manrope,Arial,sans-serif}h1,h2,h3{line-height:1.12;color:#3b2a22}h1{font-size:clamp(2.5rem,5.5vw,4rem);max-width:850px;letter-spacing:-.04em}h2{font-size:clamp(1.9rem,3.3vw,2.55rem);letter-spacing:-.035em}h3{font-size:1.2rem}.container{width:min(1120px,calc(100% - 36px));margin:0 auto}.narrow{max-width:750px}.demo-strip{background:#3b2a22;color:#fff9f0;text-align:center;font-size:.78rem;padding:5px 12px}.site-header{background:#f4eddf;position:sticky;top:0;z-index:10;border-bottom:1px solid #dfcfba}.nav-bar,.nav-actions,.site-header nav,.actions,.progress-labels{display:flex;align-items:center;gap:20px}.nav-bar{min-height:78px;justify-content:space-between}.brand{text-decoration:none;color:#3b2a22;font-size:1.25rem;font-weight:700;line-height:1}.brand strong{display:block;font-size:1.5rem}.site-header nav a{text-decoration:none;font-size:.89rem;font-weight:600}.nav-actions{gap:9px}.nav-actions>a:not(.btn){text-decoration:none;font-size:.85rem;font-weight:700}
+/* Idioma seleccionat: roig de La Dissident, sense subratllat */
+.nav-actions a[aria-current="page"] {
+  color: #a55e3b;
+  border-bottom: none;
+  text-decoration: none;
+}
+
+/* Idioma no seleccionat */
+.nav-actions a:not([aria-current="page"]):not(.btn) {
+  color: #3b2a22;
+}
+.btn{border:2px solid #a55e3b;color:#fff9f0;background:#a55e3b;border-radius:9px;padding:12px 24px;font-size:.86rem;text-decoration:none;font-weight:700;display:inline-block;transition:filter .15s}.btn:hover{filter:brightness(.9)}.btn-small{padding:8px 12px}.btn-outline{background:transparent;color:#3b2a22;border-color:#647052}.hero{background:#efe5d6;padding:84px 0 48px}.hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:60px;align-items:center}.hero-subtitle{font-weight:700;color:#647052}.eyebrow{font-family:Manrope,sans-serif;font-weight:800;font-size:.75rem;letter-spacing:.13em;color:#a55e3b;text-transform:uppercase}.actions{margin-top:30px;flex-wrap:wrap}.hero-mark{justify-self:center;font-family:Manrope,sans-serif;font-weight:800;color:#3b2a22;transform:rotate(-8deg);font-size:clamp(2.3rem,5vw,5rem);line-height:.9;text-align:center;letter-spacing:-.07em}.hero-mark span{display:block;font-size:.55em}.hero-mark strong{display:block}.hero-mark i{display:block;margin:12px auto 0;background:#3b2a22;height:9px;width:70%;border-radius:100%}.progress-card{background:#fff9f0;border:1px solid #d8c4a8;border-radius:14px;margin-top:55px;padding:26px}.progress-labels{justify-content:space-between;font-size:.92rem}.progress-labels.minor{font-size:.82rem;color:#686158;margin-top:10px;flex-wrap:wrap}.progress-track{background:#d8c4a8;height:20px;border-radius:50px;overflow:hidden;margin-top:14px}.progress-fill{background:#647052;height:100%;border-radius:50px}.section{padding:90px 0}.cream-section{background:#fff9f0}.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}.text-panel,.choice,.form-panel{background:#fff9f0;border:1px solid #d8c4a8;border-radius:15px;padding:28px}.cream-section .text-panel,.cream-section .form-panel{background:#f4eddf}.video-frame{aspect-ratio:16/9;background:#3b2a22;border-radius:15px;overflow:hidden;color:#fff9f0}.video-frame iframe{border:0;width:100%;height:100%}.video-placeholder{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px;text-align:center}.play-icon{font-size:2.6rem;color:#d8c4a8}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:35px}.choice{display:flex;flex-direction:column}.choice p{flex:1}.circle{border-radius:50%;background:#647052;color:white;display:grid;place-items:center;width:45px;height:45px;font-family:Manrope,sans-serif;font-weight:700;font-size:.82rem}.text-link{font-weight:700;color:#a55e3b}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:start}.form-panel h2{font-size:1.7rem}.warning{background:#f4dfd5;border-left:4px solid #a55e3b;padding:12px 15px;font-size:.86rem}.small-note{font-size:.88rem}.demo-form{display:grid;gap:15px}.demo-form label:not(.check):not(.amount-option),.admin-page label{display:grid;gap:5px;font-size:.9rem;font-weight:700}.demo-form input:not([type=radio]):not([type=checkbox]),.demo-form textarea,.demo-form select,.admin-page input{width:100%;border:1px solid #ab9a88;border-radius:7px;padding:10px;background:white;color:#24231f}.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.demo-form fieldset{border:0;padding:0;margin:0}.demo-form legend{font-size:.9rem;font-weight:700;margin-bottom:10px}.amount-options{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.amount-option{cursor:pointer}.amount-option input{position:absolute;opacity:0}.amount-option span{display:inline-block;padding:7px 10px;border-radius:6px;border:1px solid #ad9983;font-size:.8rem}.amount-option input:checked+span{background:#647052;color:white;border-color:#647052}.amount-option input:focus-visible+span{outline:3px solid #a55e3b}.check{display:flex;align-items:flex-start;gap:9px;font-size:.82rem;line-height:1.35}.check input{margin-top:4px;accent-color:#647052;flex:none}.form-status{background:#dce5d5;border-radius:7px;padding:12px;font-size:.9rem}.form-status[hidden],.bag-field[hidden]{display:none}.section details{border-bottom:1px solid #d8c4a8;padding:20px 0}.section summary{cursor:pointer;font-weight:700}.section details p{margin-bottom:0}.share-section{text-align:center;background:#647052;color:white}.share-section h2{color:white}.share-section .btn{background:#fff9f0;color:#3b2a22;border-color:#fff9f0}footer{background:#3b2a22;color:#fff9f0;padding:45px 0}.footer-content{display:flex;justify-content:space-between;gap:40px}.footer-content strong{font-family:Manrope,sans-serif;font-size:1.3rem}.footer-content>div:last-child{text-align:right}.admin-page{padding:50px 0;max-width:850px}.admin-page .form-panel{margin:25px 0}.admin-page label{margin:14px 0}.admin-page .btn{margin-top:10px}:focus-visible{outline:3px solid #a55e3b;outline-offset:3px}@media(max-width:850px){.site-header nav{display:none}.hero-grid,.split,.form-grid{grid-template-columns:1fr}.hero-mark{display:none}.choice-grid{grid-template-columns:1fr}.hero{padding-top:45px}.section{padding:55px 0}.footer-content{flex-direction:column}.footer-content>div:last-child{text-align:left}}@media(max-width:500px){.nav-bar{min-height:68px}.container{width:min(100% - 28px,1120px)}.progress-card{padding:18px}.progress-labels{gap:8px;font-size:.75rem}.two-cols{grid-template-columns:1fr}.hero h1{font-size:2.55rem}.form-panel,.choice{padding:20px}.nav-actions .btn-small{font-size:.75rem;padding:8px 10px}}
+/* --- Revisió 2 · canvis de la cooperativa --- */
+html {scroll-padding-top:100px}
+.brand{display:flex;align-items:center;flex:none}
+.brand img{display:block;object-fit:contain;width:165px;height:64px}
+.site-header nav{display:flex;align-items:center;gap:26px}
+.hero{padding:34px 0 30px}
+.hero h1{font-size:clamp(2rem,4vw,3.35rem);line-height:1.09;max-width:820px;margin:0 0 17px}
+.hero-subtitle{font-family:Manrope,Arial,sans-serif;font-size:clamp(.96rem,1.7vw,1.14rem);margin:0;color:#3b2a22}
+.hero .actions{margin-top:19px;gap:12px}
+.hero .progress-card{margin-top:25px;padding:17px 22px}
+.hero .progress-track{height:16px;margin-top:10px}
+.narrative h2{margin-top:0;margin-bottom:26px}
+.narrative h3{margin:28px 0 8px}
+.narrative p{margin:0;line-height:1.65}
+.narrative h3:first-of-type{margin-top:0}
+.forms-container{max-width:850px}
+.forms-container>h2{margin-top:0;margin-bottom:6px}
+.forms-container>p{margin:0 0 24px}
+.form-accordion{background:#f4eddf;border:1px solid #d8c4a8;border-radius:12px;margin-bottom:14px;overflow:hidden;scroll-margin-top:105px}
+.form-accordion>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;font-family:Manrope,Arial,sans-serif;color:#3b2a22;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;cursor:pointer}
+.form-accordion>summary::-webkit-details-marker{display:none}
+.form-accordion[open]>summary{border-bottom:1px solid #d8c4a8}
+.accordion-chevron{height:12px;width:12px;border-right:2px solid #647052;border-bottom:2px solid #647052;transform:rotate(45deg);transition:transform .2s;flex:none}
+.form-accordion[open] .accordion-chevron{transform:rotate(225deg)}
+.form-inside{padding:24px}
+.demo-form{gap:16px}
+.demo-form label:not(.check):not(.amount-option){display:grid;gap:5px;font-size:.9rem;font-weight:700}
+.demo-form fieldset{min-width:0}
+.demo-form .inset-panel{background:#fff9f0;border:1px solid #d8c4a8;border-radius:12px;padding:22px;margin:3px 0 0}
+.demo-form .inset-panel>legend{padding:0 6px;font-size:.92rem;color:#3b2a22}
+.cup-field .check,.delivery-choice .check{margin:8px 0}
+.delivery-fields{margin-top:18px;border-top:1px solid #d8c4a8;padding-top:16px}
+.shipping-fields{display:grid;gap:12px;margin-top:14px}
+.delivery-choice legend{font-weight:700;margin-bottom:6px}
+.consents{border-top:1px solid #d8c4a8;padding-top:20px;display:grid;gap:13px;margin-top:5px}
+.muted{color:#77766f;font-size:.86rem}
+.cup-hint{margin:-3px 0 2px}
+.min-loan-note{margin:-12px 0 0}
+.info-note{border-left:3px solid #647052;background:#edf0e7;padding:12px 15px;font-size:.87rem;line-height:1.5;margin:3px 0}
+.form-accordion .warning{margin:0 0 20px}
+.form-accordion .form-status[hidden],.form-accordion .cup-field[hidden],.delivery-fields[hidden],.shipping-fields[hidden],.cup-hint[hidden]{display:none}
+.faq-item{border-bottom:1px solid #d8c4a8;padding:20px 0}
+.faq-item summary{font-weight:700;cursor:pointer}
+.faq-item p{margin-bottom:0}
+@media(max-width:850px){.site-header nav{display:flex;gap:12px}.site-header nav a{font-size:.79rem}.hero{padding:29px 0}.hero h1{max-width:700px}}
+@media(max-width:600px){.nav-bar{gap:10px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}.brand img{width:112px;height:auto}.site-header nav{order:3;width:100%;justify-content:center}.nav-actions{margin-left:auto}.hero h1{font-size:clamp(1.85rem,7.5vw,2.5rem)}.hero .btn{padding:10px 15px}.form-inside{padding:16px}.form-accordion>summary{padding:17px}.demo-form .inset-panel{padding:16px}.progress-labels.minor{font-size:.75rem}}
+
+/* Revisió 3 — capçalera i portada contínues, jerarquia uniforme */
+.site-header, .hero { background:#fff9f0; }
+.site-header { border-bottom:1px solid transparent; transition:border-color .18s ease,box-shadow .18s ease; }
+.site-header.is-scrolled { border-bottom-color:#d8c4a8; box-shadow:0 2px 10px rgb(59 42 34 / 5%); }
+.site-header .nav-bar { gap:20px; }
+.brand { margin-left:0; padding:0; }
+.brand img { display:block; object-fit:contain; object-position:left center; }
+.mobile-menu { display:none; position:relative; }
+.hero { padding-top:24px; }
+.hero h1 { margin-top:0; }
+.narrative .eyebrow { margin:0 0 14px; }
+.narrative-body { max-width:760px; }
+.narrative-body h2 { font-size:clamp(1.9rem,3.3vw,2.55rem); margin:36px 0 13px; }
+.narrative-body h2:first-child { margin-top:0; }
+.narrative-body p { margin:0; line-height:1.65; }
+.section-heading { margin-bottom:24px; }
+.section-heading h2 { margin-top:0; margin-bottom:6px; }
+.section-heading p { margin:0; }
+.forms-container { max-width:850px; margin:0 auto; }
+.faq-list { max-width:750px; }
+#preguntes h2 { margin-top:0; }
+@media (max-width:850px) {
+  .site-header nav.desktop-nav { display:flex; }
+}
+@media (max-width:650px) {
+  .nav-bar { display:flex; flex-wrap:nowrap; gap:6px; min-height:65px; padding:7px 0; }
+  .site-header nav.desktop-nav { display:none; }
+  .brand { min-width:0; flex:0 1 auto; }
+  .brand img { width:clamp(78px,22vw,115px); height:auto; max-height:46px; }
+  .nav-actions { display:flex; flex:0 0 auto; gap:5px; margin-left:auto; white-space:nowrap; }
+  .nav-actions>a:not(.btn) { font-size:.74rem; }
+  .nav-actions .btn-small { font-size:.71rem; padding:7px 8px; }
+  .mobile-menu { display:block; order:-1; flex:none; margin-right:4px; }
+  .mobile-menu>summary { list-style:none; cursor:pointer; display:grid; place-items:center; width:32px; height:36px; border-radius:5px; }
+  .mobile-menu>summary::-webkit-details-marker { display:none; }
+  .hamburger { display:flex; flex-direction:column; width:20px; gap:4px; }
+  .hamburger span { height:2px; background:#3b2a22; border-radius:2px; width:100%; }
+  .mobile-menu nav { display:flex; flex-direction:column; align-items:stretch; gap:0; position:absolute; z-index:25; top:calc(100% + 12px); left:-6px; min-width:205px; background:#fff9f0; border:1px solid #d8c4a8; border-radius:10px; padding:7px; box-shadow:0 10px 22px rgb(59 42 34 / 12%); }
+  .mobile-menu:not([open]) nav { display:none; }
+  .mobile-menu nav a { display:block; text-decoration:none; padding:11px 10px; font-size:.87rem; }
+  .mobile-menu nav a:hover { background:#f4eddf; border-radius:5px; }
+  .hero { padding:20px 0 28px; }
+  .hero h1 { font-size:clamp(1.63rem,6.1vw,2.2rem); line-height:1.12; }
+  .hero-subtitle { font-size:.92rem; }
+  .hero .actions { gap:8px; margin-top:17px; }
+  .hero .btn { padding:9px 12px; font-size:.76rem; }
+  .hero .progress-card { margin-top:20px; padding:15px; }
+  .section { padding:52px 0; }
+  .section-heading { margin-bottom:20px; }
+}
+@media (max-width:370px) {
+  .brand img { width:75px; }
+  .nav-actions { gap:3px; }
+  .nav-actions .btn-small { padding:6px 6px; font-size:.67rem; }
+  .mobile-menu { margin-right:0; }
+}
+/* Corregir hamburguesa i menú desplegable */
+@media (max-width: 650px) {
+
+  .site-header .mobile-menu {
+    position: relative;
+    display: block;
+    flex: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Centrar les tres ratlles dins del botó */
+  .site-header .mobile-menu > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .site-header .mobile-menu .hamburger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    gap: 4px;
+    margin: 0;
+  }
+
+  /* Centrar el desplegable sota la hamburguesa */
+  .site-header .mobile-menu > nav {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+
+    width: 210px;
+    min-width: 210px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    order: initial;
+
+    padding: 8px;
+    background: #fff9f0;
+    border: 1px solid #d8c4a8;
+    border-radius: 10px;
+    box-shadow: 0 10px 22px rgb(59 42 34 / 12%);
+    z-index: 25;
+  }
+
+  .site-header .mobile-menu:not([open]) > nav {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+
+  /* Centrar l'hamburguesa respecte a tot el header */
+  .site-header .mobile-menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+  }
+
+  /* Utilitzar el header com a referència */
+  .site-header .header-inner {
+    position: relative;
+  }
+
+}
+
+/* Botó Veure el vídeo */
+.hero .btn-outline {
+  background-color: #647052;
+  color: #FFF9F0;
+  border: 2px solid #647052;
+}
+
+/* Efecte quan passes el ratolí */
+.hero .btn-outline:hover {
+  background-color: #4E5A40;
+  border-color: #4E5A40;
+  color: #FFF9F0;
+}
+
+/* Separació entre Objectius del projecte i Què volem fer */
+#objectius .eyebrow {
+  margin-bottom: 40px;
+}
+
+/* Footer */
+
+/* FOOTER - Tres columnes */
+
+.site-footer .footer-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-brand {
+  justify-self: center;
+  text-align: center;
+}
+
+.footer-brand img {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Correu a l'esquerra */
+.footer-email {
+  justify-self: start;
+}
+
+/* Logo exactament al centre */
+.footer-brand {
+  justify-self: center;
+}
+
+.footer-brand img {
+  display: block;
+  width: 120px;
+  height: auto;
+}
+
+/* Enllaços legals a la dreta */
+.footer-legal {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Versió mòbil */
+@media (max-width: 650px) {
+  .site-footer .footer-inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+
+  .footer-email,
+  .footer-brand,
+  .footer-legal {
+    justify-self: center;
+  }
+
+  .footer-brand img {
+    width: 110px;
+  }
+
+  .footer-legal {
+    justify-content: center;
+  }
+}
+
+/* Títol de la tassa dins del requadre */
+.cup-heading {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #3B2A22;
+  margin-bottom: 18px;
+}
+
+/* Reproductor Vimeo */
+
+.video-player {
+  width: 100%;
+}
+
+/* Selector d'idioma */
+.video-language {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.video-lang-btn {
+  background: transparent;
+  color: #3B2A22;
+  border: 1px solid #D8C4A8;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Idioma seleccionat */
+.video-lang-btn[aria-pressed="true"] {
+  background: #647052;
+  border-color: #647052;
+  color: #FFF9F0;
+}
+
+.video-lang-btn:hover {
+  border-color: #647052;
+}
+
+/* Vídeo responsive */
+.video-player .video-frame {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #3B2A22;
+}
+
+.video-player .video-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Respectar els elements ocults */
+.video-player [hidden] {
+  display: none !important;
+}
+
+@media (max-width: 650px) {
+  .video-language {
+    justify-content: center;
+  }
+
+  .video-lang-btn {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Finançament 2026 — nous formularis i informació desplegable */
+.finance-choices { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.finance-diffusion-link { margin-top: 24px; text-align: center; }
+.finance-diffusion-link a { color: #647052; font-weight: 700; }
+.finance-inside { max-width: 100%; }
+.finance-form fieldset { border: 0; padding: 0; margin: 0 0 20px; }
+.finance-mode-field { padding: 18px !important; border: 1px solid #D8C4A8 !important; border-radius: 12px; background: #FFF9F0; }
+.finance-mode-field legend { font-weight: 700; padding: 0 4px; }
+.finance-mode-field .check { margin-top: 12px; }
+.finance-branch, .finance-shared-preferences, .finance-explainer, .bank-panel, .cup-mail-panel { margin: 20px 0; padding: 22px; border-radius: 12px; }
+.finance-explainer { background: #F4EDDF; }
+.finance-branch { background: #F4EDDF; }
+.finance-explainer h3,.finance-branch h3,.bank-panel h3,.cup-mail-panel h3 { margin: 0 0 12px; }
+.finance-explainer .faq-item { margin: 12px 0; background: #FFF9F0; }
+.finance-explain-item p { padding: 0 16px 14px; }
+.finance-table-scroll { max-width: 100%; overflow-x:auto; }
+.finance-comparison table { border-collapse: collapse; min-width: 520px; width: 100%; font-size: .9rem; }
+.finance-comparison th,.finance-comparison td { text-align:left; padding: 10px; border-bottom: 1px solid #D8C4A8; }
+.finance-comparison thead { background: #3B2A22; color: #FFF9F0; }
+.finance-privacy { font-size: .85rem; line-height: 1.6; }
+.finance-form [hidden], .donation-information [hidden] { display: none !important; }
+.bank-panel [data-copy-iban]:disabled { opacity: .5; cursor:not-allowed; }
+@media(max-width: 780px){.finance-choices{grid-template-columns:1fr;} .finance-branch,.finance-explainer,.bank-panel,.cup-mail-panel{padding:16px;}}
+
+/* Explicació "T'ajudem a triar" sense requadre */
+.finance-form .finance-branch-plain {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 24px 0;
+}
+
+/* Revisió formulari: preferències de l'opció indecisa en el mateix bloc de dades */
+.finance-form .finance-shared-preferences {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 16px 0 20px;
+}
+.finance-form .finance-branch-plain { margin-bottom: 14px; }
+.finance-form .finance-branch-plain p { margin-bottom: 0; }
+.finance-explain-item .finance-comparison { padding: 6px 16px 18px; }
+.finance-explain-item .finance-comparison h4 { margin: 8px 0 12px; }
+
+/* Corregir desbordament de la taula en mòbil */
+@media (max-width: 780px) {
+
+  .forms-container,
+  .form-accordion,
+  .form-inside,
+  .finance-form,
+  .finance-explainer,
+  .finance-explain-item,
+  .finance-comparison {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Només la taula pot desplaçar-se horitzontalment */
+  .finance-table-scroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .finance-comparison table {
+    width: 100%;
+    min-width: 520px;
+  }
+
+  /* Evitar que les cel·les es comprimisquen massa */
+  .finance-comparison th,
+  .finance-comparison td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+}
+
+/*.container h2, p, a{color:#f4eddf;}*/
+
+
+/* Finançament — validació i confirmació accessibles */
+.finance-form [aria-invalid="true"]:not([type="radio"]):not([type="checkbox"]) {
+  border: 2px solid #a55e3b !important;
+  background: #fff7f3;
+  outline-color: #a55e3b;
+}
+.finance-form .check:has([aria-invalid="true"]) { color: #8e3e2f; }
+.finance-group-invalid { border: 2px solid #a55e3b !important; }
+.finance-field-error { display: block; font-size: .82rem; font-weight: 600; color: #983d2a; line-height: 1.4; }
+.finance-error-summary:not([hidden]) {
+  background: #fff0e9; color: #812f23; border-left: 4px solid #a55e3b;
+  padding: 12px 15px; border-radius: 6px; font-weight: 650;
+}
+.finance-success-dialog {
+  border: 1px solid #d8c4a8; border-radius: 16px;
+  background: #fff9f0; color: #3b2a22;
+  width: min(450px, calc(100% - 32px)); max-height: calc(100dvh - 32px);
+  padding: 0; box-shadow: 0 18px 75px rgb(37 26 22 / 30%);
+}
+.finance-success-dialog::backdrop { background: rgb(27 19 15 / 66%); }
+.finance-success-content { padding: clamp(24px, 5vw, 40px); text-align: center; }
+.finance-success-content h2 { font-size: clamp(1.45rem, 4vw, 1.9rem); margin: 14px 0 10px; }
+.finance-success-content p { margin: 0 0 23px; line-height: 1.6; }
+.finance-success-icon {
+  background: #647052; color: #fff9f0; width: 54px; height: 54px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: 1.7rem; margin: 0 auto;
+}
+.finance-success-dialog .btn { min-width: 120px; }
+
+/* Correu i copyright del footer */
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.footer-brand small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 650px) {
+  .footer-contact {
+    align-items: center;
+  }
+}
+
+/* Separació entre CA/ES i Participa en mòbil */
+@media (max-width: 650px) {
+  .nav-actions > .btn-small {
+    margin-left: 12px;
+  }
+}
+
+/* Avís temporal: aportacions a fons perdut */
+.donation-pending {
+  background: #F4DFD5;
+  border-left: 4px solid #A55E3B;
+  padding: 18px 22px;
+  border-radius: 6px;
+  color: #3B2A22;
+}
+
+.donation-pending p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.donation-information [hidden] {
+  display: none !important;
+}
+
+/* Enllaç de Telegram en el footer */
+.footer-telegram {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer-telegram svg {
+  flex-shrink: 0;
+}
+
+.footer-telegram:hover {
+  text-decoration: underline;
+}
+
+/* Correu i Telegram amb el mateix estil */
+.footer-contact > a,
+.footer-telegram {
+  font-size: 0.85rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Subratllat només quan passes el ratolí */
+.footer-contact > a:hover {
+  text-decoration: underline;
+}
+
+/* Copyright sempre davall del logotip */
+.footer-copyright {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* Color del text de la secció de difusió */
+.share-section-color h2,
+.share-section-color p {
+  color: #F4EDDF;
+}
+
+/* Text legal del formulari: més xicotet */
+.finance-form .finance-privacy {
+  font-size: 0.6rem;
+  line-height: 1.5;
+  opacity: 0.75;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+/* Separació de la verificació de Cloudflare */
+.finance-form .cf-turnstile,
+.finance-form .finance-privacy + .info-note {
+  margin-top: 7px;
+  margin-bottom: 20px;
+}
+
+.finance-form button[type="submit"] {
+  display: block;
+  width: fit-content;
+  margin: 12px auto 0px;
+}
+
+/* Contacte igual que els altres enllaços del header */
+.site-header .desktop-nav .contact-nav-trigger {
+  appearance: none;
+  font-family: 'Source Sans 3', Arial, sans-serif;
+  font-size: 0.89rem;
+  font-weight: 600;
+  line-height: inherit;
+
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Mateix efecte en passar el ratolí */
+.site-header .desktop-nav .contact-nav-trigger:hover {
+  text-decoration: none;
+}
+    .contact-hero-trigger {
+      background: transparent;
+      color: #3b2a22;
+      border: 2px solid #3b2a22;
+      cursor: pointer;
+    }
+    .contact-hero-trigger:hover { background: #3b2a22; color: #fff; }
+    .contact-dialog {
+      width: min(520px, calc(100% - 32px));
+      max-height: min(90dvh, 760px);
+      overflow-y: auto;
+      margin: auto;
+      border: 0;
+      border-radius: 16px;
+      padding: 0;
+      background: #f9f4ee;
+      color: #3b2a22;
+      box-shadow: 0 15px 55px #0004;
+    }
+    .contact-dialog::backdrop { background: rgb(20 13 9 / 65%); }
+    .contact-dialog-inner { position: relative; padding: clamp(22px, 5vw, 34px); }
+    .contact-dialog h2 { margin: 0 42px 12px 0; color: #3b2a22; }
+    .contact-dialog h3 { margin: 0 0 8px; color: #3b2a22; font-size: 1.1rem; }
+    .contact-dialog p { line-height: 1.5; }
+/* X del pop-up de contacte */
+.contact-dialog .contact-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  color: #3b2a22;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+/* En passar el ratolí: només canvia el color */
+.contact-dialog .contact-close:hover {
+  background: transparent;
+  box-shadow: none;
+  color: #a55e3b;
+}
+    .contact-option { border: 1px solid #c5b4a5; border-radius: 12px; padding: 18px; margin-top: 18px; }
+    .contact-option p { margin: 0 0 12px; }
+    .contact-email-address { overflow-wrap: anywhere; }
+    .contact-option-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+/* Botons de contacte: tots marrons i sense vora */
+.contact-action-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 11px 20px;
+  background: #3b2a22;
+  color: #f4eddf;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Mateixa tipografia que els botons de la web */
+/* Mateixa tipografia que els botons originals de La Dissident */
+.contact-action-primary,
+.contact-action-primary span {
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+
+    .contact-copy-status:empty { display: none; }
+    .contact-dialog :is(button,a):focus-visible, .contact-hero-trigger:focus-visible, .contact-nav-trigger:focus-visible {
+      outline: 3px solid #ab493b; outline-offset: 4px;
+    }
+    @media (max-width: 650px) {
+      .hero .actions { flex-wrap: wrap; }
+      .contact-dialog-inner { padding: 22px 18px; }
+      .contact-option { padding: 14px; }
+    }
+    
+    /* Inicialment només es mostra la icona de copiar */
+.contact-icon-check {
+  display: none;
+}
+
+/* Quan es copia, apareix el tic */
+.contact-copy-success .contact-icon-copy {
+  display: none;
+}
+
+.contact-copy-success .contact-icon-check {
+  display: block;
+}
+
+/* Ocultar visualment la confirmació, però mantindre-la accessible */
+.contact-copy-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+/* Ocultar la confirmació visualment */
+.contact-copy-status:not(.contact-copy-error) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mateix hover per als dos botons del contacte */
+.contact-dialog .contact-action-primary:hover {
+  background-color: #634739;
+  color: #f4eddf;
+  border-color: transparent;
+  text-decoration: none;
+  filter: none;
+}
+.contact-dialog .contact-action-primary {
+  transition: background-color 0.2s ease;
+}
+
+/* Contacte igual que els altres enllaços del menú mòbil */
+@media (max-width: 650px) {
+  .site-header .mobile-menu nav .contact-nav-trigger {
+    display: block;
+    width: 100%;
+    padding: 11px 10px;
+    margin: 0;
+
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+
+    color: inherit;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 0.87rem;
+    font-weight: 600;
+    line-height: inherit;
+
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .site-header .mobile-menu nav .contact-nav-trigger:hover {
+    background: #f4eddf;
+    text-decoration: none;
+  }
+}
+
+/* Estat normal del botó de copiar */
+.contact-dialog button[data-copy-contact] {
+  background-color: #3b2a22;
+  color: #f4eddf;
+  transition: background-color 0.2s ease;
+}
+
+/* Mentre es mostra el tic: color de hover */
+.contact-dialog button[data-copy-contact].contact-copy-success {
+  background-color: #634739;
+  color: #f4eddf;
+}
+
+/* En dispositius tàctils, evitar que el hover quede enganxat */
+@media (hover: none) {
+  .contact-dialog button[data-copy-contact]:hover:not(.contact-copy-success) {
+    background-color: #3b2a22;
+    color: #f4eddf;
+  }
+}
+
+/* Logotip més gran en ordinador */
+.site-header .brand img {
+  width: 200px;
+  height: auto;
+  max-height: none;
+}
+
+
+
+/* Logotip més gran en mòbil */
+@media (max-width: 650px) {
+  .site-header .brand img {
+    width: clamp(140px, 40vw, 125px);
+    height: auto;
+    max-height: none;
+  }
+
+}
+
+/* Títol principal un poc més menut */
+.hero h1 {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+}
+
+/* Ajust per a mòbil */
+@media (max-width: 650px) {
+  .hero h1 {
+    font-size: clamp(1.3rem, 5.5vw, 2rem);
+  }
+}
+
+/* Més separació entre el header i el títol principal */
+.hero {
+  padding-top: 45px;
+}
+
+/* Ajust per a mòbil */
+@media (max-width: 650px) {
+  .hero {
+    padding-top: 40px;
+
+  }
+}
+

@@ -1,0 +1,580 @@
+---
+import Base from '../layouts/Base.astro';
+import Financing from './Financing.astro';
+import { campaign, content, vimeoVideos, bankDetails } from '../data/content';
+const { lang = 'ca' } = Astro.props;
+const locale = lang === 'es' ? 'es' : 'ca';
+const t = content[locale];
+const money = (n:number) => new Intl.NumberFormat(locale === 'ca' ? 'ca-ES' : 'es-ES', { style:'currency', currency:'EUR', maximumFractionDigits:0 }).format(n);
+const percent = Math.round(campaign.demoRaised / campaign.goal * 100);
+const donationsEnabled = false;
+
+---
+<Base lang={locale} title={`La Dissident`} description={t.headline}>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <!-- SUBSTITUEIX public/logo-la-dissident.png per l'arxiu oficial, sense canviar el nom. -->
+      <a class="brand" href={`/${locale}/`} aria-label="La Dissident">
+        <img src="/logo-la-dissident.png" width="165" height="64" alt="La Dissident" />
+      </a>
+      <nav class="desktop-nav" aria-label={locale === 'ca' ? 'Menú principal' : 'Menú principal'}>
+        <a href="#projecte">{t.navAbout}</a>
+        <a href="#preguntes">{t.navFaq}</a>
+        <button type="button" class="contact-nav-trigger" data-open-contact>{locale === 'ca' ? 'Contacte' : 'Contacto'}</button>
+      </nav>
+      <div class="nav-actions">
+        <details class="mobile-menu">
+          <summary aria-label={locale === 'ca' ? 'Obrir el menú' : 'Abrir el menú'} aria-controls="mobile-navigation"><span class="hamburger" aria-hidden="true"><span></span><span></span><span></span></span></summary>
+          <nav id="mobile-navigation" aria-label={locale === 'ca' ? 'Menú mòbil' : 'Menú móvil'}>
+            <a href="#projecte">{t.navAbout}</a>
+            <a href="#preguntes">{t.navFaq}</a>
+            <button type="button" class="contact-nav-trigger" data-open-contact>{locale === 'ca' ? 'Contacte' : 'Contacto'}</button>
+          </nav>
+        </details>
+        <a href="/ca/" lang="ca" aria-current={locale === 'ca' ? 'page' : undefined}>CA</a>
+        <span aria-hidden="true">/</span>
+        <a href="/es/" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+        <a class="btn btn-small" href="#participa">{t.participate}</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="campanya">
+      <div class="container">
+        <h1>{t.headline}</h1>
+        <p class="hero-subtitle">{t.subtitle}</p>
+        <div class="actions">
+          <a class="btn" href="#participa">{t.participate}</a>
+          <a class="btn btn-outline" href="#video-section">{t.watch}</a>
+
+        </div>
+        <div class="progress-card">
+          <div class="progress-labels"><strong>{money(campaign.demoRaised)} {t.achieved}</strong><strong>{percent}%</strong></div>
+          <div class="progress-track" role="progressbar" aria-label={t.achieved} aria-valuemin="0" aria-valuemax={campaign.goal} aria-valuenow={campaign.demoRaised}>
+            <div class="progress-fill" style={`width:${Math.min(percent,100)}%`}></div>
+          </div>
+          <div class="progress-labels minor"><span>{money(Math.max(0,campaign.goal-campaign.demoRaised))} {t.missing}</span><span>{t.updated} {campaign.demoUpdated.split('-').reverse().join('/')}</span></div>
+        </div>
+      </div>
+      
+    </section>
+
+    <section class="section" id="projecte">
+      <div class="container split" id="video">
+        <div><p class="eyebrow">{t.videoHeading}</p><h2>{t.aboutTitle}</h2><p>{t.about}</p></div>
+
+<div
+  id="video-section"
+  class="video-player"
+  data-vimeo-player
+  data-ca={vimeoVideos.ca}
+  data-es={vimeoVideos.es}
+>
+  <!-- Selector d'idioma -->
+  <div class="video-language" role="group" aria-label="Idioma del vídeo">
+    <button
+      type="button"
+      class="video-lang-btn"
+      data-video-lang="ca"
+      aria-pressed={locale === 'ca'}
+    >
+      Valencià
+    </button>
+
+    <button
+      type="button"
+      class="video-lang-btn"
+      data-video-lang="es"
+      aria-pressed={locale === 'es'}
+    >
+      Castellano
+    </button>
+  </div>
+
+  <!-- Reproductor -->
+  <div class="video-frame">
+    <iframe
+      data-vimeo-iframe
+      src={vimeoVideos[locale] || undefined}
+      title={locale === 'ca'
+        ? 'Vídeo de La Dissident'
+        : 'Vídeo de La Dissident'}
+      loading="lazy"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      hidden={!vimeoVideos[locale]}
+    ></iframe>
+
+    <div
+      class="video-placeholder"
+      data-video-placeholder
+      hidden={Boolean(vimeoVideos[locale])}
+    >
+      <span class="play-icon" aria-hidden="true">▶</span>
+      <p>{t.videoPlaceholder}</p>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </section>
+
+    <section class="section cream-section" id="objectius">
+      <div class="container narrative">
+        <p class="eyebrow">{t.objectivesTitle}</p>
+        <div class="narrative-body">
+          <h2>{t.goalTitle}</h2><p>{t.goalCopy}</p>
+          <h2>{t.conceptTitle}</h2><p>{t.concept}</p>
+          <h2>{t.communityTitle}</h2><p>{t.community}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="participa">
+      <div class="container">
+        <h2>{locale === 'ca' ? 'Com vols participar?' : '¿Cómo quieres participar?'}</h2>
+        <div class="choice-grid finance-choices">
+          <article class="choice"><div class="circle">01</div><h3>{t.donation}</h3><p>{locale === 'ca' ? 'Transferència definitiva a La Dissident, sense devolució ni drets econòmics o polítics. A partir de 50 €, tassa opcional.' : 'Transferencia definitiva a La Dissident, sin devolución ni derechos económicos o políticos. A partir de 50 €, taza opcional.'}</p><a class="text-link" data-open-form="donation" href="#form-aportacio">{locale === 'ca' ? 'Veure com aportar' : 'Ver cómo aportar'} ↗</a></article>
+          <article class="choice"><div class="circle">02</div><h3>{locale === 'ca' ? 'Préstec personal a una persona impulsora de La Dissident' : 'Préstamo personal a una persona impulsora de La Dissident'}</h3><p>{locale === 'ca' ? 'El préstec es formalitzarà individualment amb una de les persones impulsores de La Dissident. Abans de firmar informarem de qui serà la persona prestatària i responsable exclusiva de la devolució. La Dissident no serà deutora ni garant.' : 'El préstamo se formalizará individualmente con una de las personas impulsoras de La Dissident. Antes de firmar informaremos de quién será la persona prestataria y responsable exclusiva de la devolución. La Disidente no será deudora ni garante.'}</p><a class="text-link" data-open-form="finance" data-finance-mode="loan" href="#form-financament">{t.loanAction} ↗</a></article>
+          <article class="choice"><div class="circle">03</div><h3>{locale === 'ca' ? 'Participa com a persona associada' : 'Participa como persona asociada'}</h3><p>{locale === 'ca' ? 'Sol·licita l’admissió i una aportació voluntària al capital social, amb reembossament segons l’acord d’emissió.' : 'Solicita tu admisión y una aportación voluntaria al capital social, con reembolso según el acuerdo de emisión.'}</p><a class="text-link" data-open-form="finance" data-finance-mode="member" href="#form-financament">{locale === 'ca' ? 'Informació per a ser persona associada' : 'Información para ser persona asociada'} ↗</a></article>
+          <article class="choice"><div class="circle">04</div><h3>{locale === 'ca' ? 'No tinc clar quina opció triar' : 'No tengo claro qué opción elegir'}</h3><p>{locale === 'ca' ? 'Vols ajudar a finançar el projecte però no saps si preferixes un préstec personal o ser persona associada? Coneix les diferències i explica’ns què necessites.' : '¿Quieres ayudar a financiar el proyecto pero no sabes si prefieres un préstamo personal o ser persona asociada? Conoce las diferencias y cuéntanos qué necesitas.'}</p><a class="text-link" data-open-form="finance" data-finance-mode="undecided" href="#form-financament">{locale === 'ca' ? 'Ajuda’m a decidir' : 'Ayúdame a decidir'} ↗</a></article>
+        </div>
+        <p class="finance-diffusion-link"><a href="#difusio">{locale === 'ca' ? 'No pots aportar diners? Ajuda’ns a difondre la campanya ↗' : '¿No puedes aportar dinero? Ayúdanos a difundir la campaña ↗'}</a></p>
+      </div>
+    </section>
+
+    <section class="section cream-section" id="formularis">
+      <div class="container">
+        <div class="section-heading"><h2>{locale === 'ca' ? 'Participació i finançament' : 'Participación y financiación'}</h2><p>{locale === 'ca' ? 'Tria com vols col·laborar i desplega la informació corresponent.' : 'Elige cómo quieres colaborar y despliega la información correspondiente.'}</p></div>
+        <div class="forms-container">
+          <details class="form-accordion" id="form-aportacio" data-form="donation">
+            <summary>{locale === 'ca' ? 'Aportació a fons perdut · transferència directa' : 'Aportación a fondo perdido · transferencia directa'}<span class="accordion-chevron" aria-hidden="true"></span></summary>
+            <div class="form-inside donation-information">
+            {!donationsEnabled && (
+  <div class="donation-pending">
+    <p>
+      {locale === 'ca'
+        ? 'Pròximament habilitarem el compte bancari per a fer aportacions a fons perdut a La Dissident. Estem acabant de preparar-ho perquè pugues col·laborar amb el projecte mitjançant transferència bancària.'
+        : 'Próximamente habilitaremos la cuenta bancaria para realizar aportaciones a fondo perdido a La Dissident. Estamos terminando de prepararlo para que puedas colaborar con el proyecto mediante transferencia bancaria.'}
+    </p>
+  </div>
+)}
+{donationsEnabled && (
+  <>
+              <p>{locale === 'ca' ? 'Les aportacions a fons perdut es fan directament al compte de La Dissident. Són definitives, no reintegrables i no generen remuneració, propietat, dret d’ús, vot ni cap altre dret econòmic o polític.' : 'Las aportaciones a fondo perdido se realizan directamente a la cuenta de La Dissident. Son definitivas, no reintegrables y no generan remuneración, propiedad, derecho de uso, voto ni ningún otro derecho económico o político.'}</p>
+              <div class="inset-panel bank-panel">
+                <h3>{locale === 'ca' ? 'Dades per a la transferència' : 'Datos para la transferencia'}</h3>
+                <p><strong>{locale === 'ca' ? 'Titular' : 'Titular'}:</strong> <span data-bank-owner>{bankDetails.owner || (locale === 'ca' ? 'Pendent de confirmar amb la cooperativa' : 'Pendiente de confirmar con la cooperativa')}</span></p>
+                <p><strong>IBAN:</strong> <span data-bank-iban data-value={bankDetails.iban}>{bankDetails.iban || (locale === 'ca' ? 'Pendent de confirmar' : 'Pendiente de confirmar')}</span></p>
+                <button type="button" class="btn btn-outline" data-copy-iban disabled={!bankDetails.iban}>{locale === 'ca' ? 'Copiar IBAN' : 'Copiar IBAN'}</button>
+                <p class="muted" data-iban-feedback role="status" aria-live="polite"></p>
+                <p><strong>{locale === 'ca' ? 'Concepte recomanat' : 'Concepto recomendado'}:</strong> APORTACIÓN LA DISSIDENT + {locale === 'ca' ? 'nom o referència' : 'nombre o referencia'}</p>
+              </div>
+              <p class="info-note">{locale === 'ca' ? 'Actualment no existeix una deducció fiscal reconeguda per a qui aporta. Les dades bancàries s’activaran quan la cooperativa les valide.' : 'Actualmente no existe una deducción fiscal reconocida para quien aporta. Los datos bancarios se activarán cuando la cooperativa los valide.'}</p>
+              <div class="inset-panel cup-mail-panel">
+                <h3>{locale === 'ca' ? 'Tassa opcional a partir de 50 €' : 'Taza opcional a partir de 50 €'}</h3>
+                <p>{locale === 'ca' ? 'Després de fer la transferència, sol·licita la tassa per correu. Indica nom, data, import, referència i si vols recollida o enviament. Adjunta el justificant ocultant saldo i altres moviments.' : 'Después de realizar la transferencia, solicita la taza por correo. Indica nombre, fecha, importe, referencia y si prefieres recogida o envío. Adjunta el justificante ocultando el saldo y otros movimientos.'}</p>
+                <a class="btn" href={locale === 'ca' ? 'mailto:hola@ladissident.org?subject=Sol%C2%B7licitud%20de%20tassa%20La%20Dissident&body=Nom%20i%20cognoms%3A%0AData%3A%0AImport%3A%0ARefer%C3%A8ncia%3A%0ALliurament%20(recull%2Fenviament)%3A%0AAdre%C3%A7a%20si%20cal%3A%0A%0AAdjunte%20el%20justificant%20amb%20la%20resta%20de%20dades%20ocultes.' : 'mailto:hola@ladissident.org?subject=Solicitud%20de%20taza%20La%20Dissident&body=Nombre%20y%20apellidos%3A%0AFecha%3A%0AImporte%3A%0AReferencia%3A%0AEntrega%20(recogida%2Fenv%C3%ADo)%3A%0ADirecci%C3%B3n%20si%20corresponde%3A%0A%0AAdjunto%20el%20justificante%20ocultando%20los%20dem%C3%A1s%20datos.'}>{locale === 'ca' ? 'Sol·licitar la tassa per correu' : 'Solicitar la taza por correo'}</a>
+                <p class="muted">{locale === 'ca' ? 'Hauràs d’adjuntar manualment el justificant al teu correu. No envies dades bancàries que no siguen necessàries.' : 'Tendrás que adjuntar manualmente el justificante en tu correo. No envíes datos bancarios innecesarios.'}</p>
+              </div>
+                  </>
+  )}
+            </div>
+          </details>
+          <Financing locale={locale}/>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="preguntes"><div class="container"><h2>{t.faq}</h2><div class="faq-list">{t.faqItems.map(([question,answer]) => <details class="faq-item"><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
+   
+<div class="share-section-color">
+   <section class="section share-section" id="difusio"><div class="container narrow"><h2>{t.shareTitle}</h2><p>{t.shareCopy}</p><button class="btn share-btn" data-share data-copy={t.copied}>{t.share}</button><p class="share-status" role="status" aria-live="polite"></p></div></section>
+  </main>
+  </div>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+
+    <!-- Esquerra: correu -->
+<!-- Esquerra: correu i copyright -->
+<div class="footer-contact">
+
+  <a
+    href="https://t.me/LADISSIDENT"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="footer-telegram"
+    aria-label={locale === 'ca'
+      ? 'Segueix La Dissident a Telegram'
+      : 'Sigue La Dissident en Telegram'}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M21.5 2.6 2.8 9.8c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.9 5.8c.2.6.1.9.8.9.5 0 .8-.2 1.1-.5l2.7-2.6 5 3.7c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.8-1.5-1.4Zm-12 13.9-.5-4.1L18.4 6l-7.7 7.5-1.2 3Z"/>
+    </svg>
+    <span>Canal de Telegram</span>
+  </a>
+  <a href="mailto:hola@ladissident.org">
+    hola@ladissident.org
+  </a>
+
+
+</div>
+
+<div class="footer-brand">
+
+    <!-- Centre: logotip crema -->
+    <a href={`/${lang}/`}>
+      <img
+        src="/logo-la-dissident-2.png"
+        alt="La Dissident"
+      />
+    </a>
+            <small>© La Dissident, Coop. V.</small>
+  </div>
+
+    <!-- Dreta: enllaços legals -->
+    <nav class="footer-legal" aria-label="Enllaços legals">
+      <a href={`/${lang}/avis-legal/`}>Avís legal</a>
+      <span>·</span>
+      <a href={`/${lang}/privacitat/`}>Privacitat</a>
+      <span>·</span>
+      <a href={`/${lang}/cookies/`}>Cookies</a>
+    </nav>
+
+  </div>
+</footer>
+
+
+  <!-- Contacte: mateixa finestra per a la navegació i la portada -->
+  <dialog class="contact-dialog" data-contact-dialog aria-labelledby="contact-dialog-title" aria-describedby="contact-dialog-description">
+    <div class="contact-dialog-inner">
+      <button type="button" class="contact-close" data-close-contact aria-label={locale === 'ca' ? 'Tancar la finestra de contacte' : 'Cerrar la ventana de contacto'}>×</button>
+      <h2 id="contact-dialog-title">{locale === 'ca' ? 'Contacte' : 'Contacto'}</h2>
+      <p id="contact-dialog-description">{locale === 'ca'
+        ? 'Tens algun dubte o vols seguir les novetats de La Dissident? Tria l’opció que preferisques.'
+        : '¿Tienes alguna duda o quieres seguir las novedades de La Dissident? Elige la opción que prefieras.'}</p>
+
+      <section class="contact-option" aria-labelledby="contact-email-title">
+        <h3 id="contact-email-title">{locale === 'ca' ? 'Escriu-nos' : 'Escríbenos'}</h3>
+        <p class="contact-email-address">hola@ladissident.org</p>
+        <div class="contact-option-actions">
+<button
+  type="button"
+  class="contact-action-primary"
+  data-copy-contact
+>
+  <!-- Icona de copiar -->
+  <svg
+    class="contact-icon-copy"
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="8" y="8" width="13" height="13" rx="2" />
+    <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
+  </svg>
+
+  <!-- Icona de confirmació -->
+  <svg
+    class="contact-icon-check"
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+
+  <span>{locale === 'ca' ? 'Copiar adreça' : 'Copiar dirección'}</span>
+</button>
+
+        </div>
+        <p class="contact-copy-status" data-contact-copy-status role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="contact-option" aria-labelledby="contact-telegram-title">
+        <h3 id="contact-telegram-title">Telegram</h3>
+        <p>{locale === 'ca'
+          ? 'Uneix-te al canal per a seguir les novetats del projecte.'
+          : 'Únete al canal para seguir las novedades del proyecto.'}</p>
+        <a class="btn contact-action-primary" href="https://t.me/LADISSIDENT" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M21.5 2.6 2.8 9.8c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.9 5.8c.2.6.1.9.8.9.5 0 .8-.2 1.1-.5l2.7-2.6 5 3.7c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.8-1.5-1.4Zm-12 13.9-.5-4.1L18.4 6l-7.7 7.5-1.2 3Z"/></svg>
+          {locale === 'ca' ? 'Obrir el canal de Telegram' : 'Abrir el canal de Telegram'}
+        </a>
+      </section>
+    </div>
+  </dialog>
+
+  <script>
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 10);
+    addEventListener('scroll', updateHeader, { passive:true });
+    updateHeader();
+    const mobileMenu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+    mobileMenu?.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => { mobileMenu.open = false; }));
+    document.addEventListener('click', event => {
+      if (mobileMenu?.open && !mobileMenu.contains(event.target as Node)) mobileMenu.open = false;
+    });
+
+    // Finestra de contacte accessible amb teclat i lector de pantalla.
+// POP-UP DE CONTACTE
+const contactDialog = document.querySelector<HTMLDialogElement>(
+  '[data-contact-dialog]'
+);
+
+// Obrir el pop-up
+document.querySelectorAll<HTMLButtonElement>('[data-open-contact]').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    if (!contactDialog) return;
+
+    // Tancar el menú hamburguesa si està obert
+    if (mobileMenu?.open) mobileMenu.open = false;
+
+    contactDialog.showModal();
+  });
+});
+
+// Tancar amb la X
+contactDialog
+  ?.querySelector<HTMLButtonElement>('[data-close-contact]')
+  ?.addEventListener('click', () => contactDialog.close());
+
+// Tancar fent clic fora del contingut
+contactDialog?.addEventListener('click', event => {
+  if (event.target === contactDialog) contactDialog.close();
+});
+
+// BOTÓ DE COPIAR EL CORREU
+const copyButton = contactDialog?.querySelector<HTMLButtonElement>(
+  '[data-copy-contact]'
+);
+
+const copyStatus = contactDialog?.querySelector<HTMLElement>(
+  '[data-contact-copy-status]'
+);
+
+let copyResetTimer: ReturnType<typeof setTimeout> | undefined;
+
+copyButton?.addEventListener('click', async () => {
+  // Netejar errors anteriors
+  copyStatus?.classList.remove('contact-copy-error');
+  if (copyStatus) copyStatus.textContent = '';
+
+  try {
+    // Copiar el correu
+    await navigator.clipboard.writeText('hola@ladissident.org');
+
+    // Canviar la icona de copiar pel tic
+    copyButton.classList.add('contact-copy-success');
+
+    // Reiniciar el temporitzador si es torna a prémer
+    clearTimeout(copyResetTimer);
+
+    // Recuperar la icona original després de 2 segons
+    copyResetTimer = setTimeout(() => {
+      copyButton.classList.remove('contact-copy-success');
+    }, 2000);
+
+    // Confirmació accessible, oculta visualment
+    if (copyStatus) {
+      copyStatus.textContent = location.pathname.startsWith('/es/')
+        ? 'Dirección copiada.'
+        : 'Adreça copiada.';
+    }
+
+  } catch {
+    // Si falla la còpia, mostrar un missatge d'error
+    copyButton.classList.remove('contact-copy-success');
+    clearTimeout(copyResetTimer);
+
+    if (copyStatus) {
+      copyStatus.classList.add('contact-copy-error');
+      copyStatus.textContent = location.pathname.startsWith('/es/')
+        ? 'No se ha podido copiar. Puedes seleccionar la dirección que aparece arriba.'
+        : 'No s’ha pogut copiar. Pots seleccionar l’adreça que apareix més amunt.';
+    }
+  }
+});
+
+    const accordions = Array.from(document.querySelectorAll<HTMLDetailsElement>('.form-accordion'));
+    accordions.forEach(current => current.addEventListener('toggle', () => {
+      if (current.open) accordions.forEach(other => { if (other !== current) other.open = false; });
+    }));
+    const openAccordion = (kind: string, scroll = true) => {
+      const target = accordions.find(el => el.dataset.form === kind);
+      if (!target) return;
+      accordions.forEach(el => { el.open = el === target; });
+      if (scroll) requestAnimationFrame(() => target.scrollIntoView({ behavior:'smooth', block:'start' }));
+    };
+    document.querySelectorAll<HTMLAnchorElement>('[data-open-form]').forEach(link => link.addEventListener('click', () => {
+      openAccordion(link.dataset.openForm || '', false);
+    }));
+    const openFromHash = () => {
+      if (location.hash === '#form-aportacio') openAccordion('donation', false);
+      if (location.hash === '#form-financament') openAccordion('finance', false);
+    };
+    addEventListener('hashchange', openFromHash);
+    openFromHash();
+
+    document.querySelectorAll<HTMLFormElement>('.demo-form:not(.finance-form)').forEach(form => {
+      form.addEventListener('submit', event => {
+        event.preventDefault(); // NO enviar datos personales en el prototipo.
+        const status = form.querySelector<HTMLElement>('.form-status');
+        if (status) { status.hidden = false; status.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+      });
+    });
+
+    const copyIban = document.querySelector<HTMLButtonElement>('[data-copy-iban]');
+    copyIban?.addEventListener('click', async () => {
+      const iban = document.querySelector<HTMLElement>('[data-bank-iban]')?.dataset.value;
+      if (!iban) return;
+      await navigator.clipboard.writeText(iban);
+      const feedback = document.querySelector<HTMLElement>('[data-iban-feedback]');
+      if (feedback) feedback.textContent = location.pathname.startsWith('/es/') ? '¡IBAN copiado!' : 'IBAN copiat!';
+    });
+    document.querySelectorAll<HTMLAnchorElement>('[data-finance-mode]').forEach(link => link.addEventListener('click', () => {
+      const mode = link.dataset.financeMode;
+      const radio = document.querySelector<HTMLInputElement>(`[name="financeMode"][value="${mode}"]`);
+      if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles:true })); }
+    }));
+
+const share = document.querySelector<HTMLButtonElement>('[data-share]');
+const shareStatus = document.querySelector<HTMLElement>('.share-status');
+
+share?.addEventListener('click', async () => {
+  const url = window.location.href.split('#')[0];
+  const title = document.title;
+
+  if (shareStatus) shareStatus.textContent = '';
+
+  // Primer intentem obrir sempre el menú natiu del mòbil.
+  if (typeof navigator.share === 'function') {
+    try {
+      await navigator.share({
+        title,
+        text: title,
+        url
+      });
+
+      return;
+    } catch (error) {
+      // Si la persona cancel·la, no fem res.
+      if ((error as Error).name === 'AbortError') {
+        return;
+      }
+
+      // Altres errors: mostrem una alternativa manual.
+      console.warn('No s’ha pogut compartir:', error);
+    }
+  }
+
+  // Alternativa: copiar l'enllaç.
+  try {
+    await navigator.clipboard.writeText(url);
+
+    if (shareStatus) {
+      shareStatus.textContent = share.dataset.copy || 'Enllaç copiat!';
+    }
+  } catch {
+    // Últim recurs quan el navegador no permet copiar.
+    if (shareStatus) {
+      shareStatus.textContent = url;
+    }
+  }
+});
+
+
+// Selector dels vídeos de Vimeo
+const videoPlayer = document.querySelector<HTMLElement>(
+  '[data-vimeo-player]'
+);
+
+if (videoPlayer) {
+  const iframe = videoPlayer.querySelector<HTMLIFrameElement>(
+    '[data-vimeo-iframe]'
+  );
+
+  const placeholder = videoPlayer.querySelector<HTMLElement>(
+    '[data-video-placeholder]'
+  );
+
+  const languageButtons = videoPlayer.querySelectorAll<HTMLButtonElement>(
+    '[data-video-lang]'
+  );
+
+  const videoUrls: Record<string, string> = {
+    ca: videoPlayer.dataset.ca || '',
+    es: videoPlayer.dataset.es || ''
+  };
+
+  function changeVideo(language: string) {
+    const url = videoUrls[language];
+
+    languageButtons.forEach(button => {
+      button.setAttribute(
+        'aria-pressed',
+        String(button.dataset.videoLang === language)
+      );
+    });
+
+    if (!iframe || !placeholder) return;
+
+    // Canviar src també deté la reproducció anterior.
+    iframe.removeAttribute('src');
+
+    if (url) {
+      iframe.src = url;
+      iframe.hidden = false;
+      placeholder.hidden = true;
+    } else {
+      iframe.hidden = true;
+      placeholder.hidden = false;
+
+      const message = placeholder.querySelector('p');
+      if (message) {
+        message.textContent = language === 'ca'
+          ? 'Vídeo en valencià pendent de configurar'
+          : 'Vídeo en castellà pendent de configurar';
+      }
+    }
+  }
+
+  languageButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const language = button.dataset.videoLang;
+      if (!language) return;
+
+      // Evitar recarregar un vídeo ja seleccionat
+      if (button.getAttribute('aria-pressed') === 'true') return;
+
+      changeVideo(language);
+    });
+  });
+}
+
+
+  </script>
+
+</Base>
