@@ -7,6 +7,7 @@ export interface NotificationData {
   fullName: string;
   email: string;
   phone: string | null;
+  locality?: string | null;
   amount: number;
   preferences: Record<string, string>;
   language: string;
@@ -22,6 +23,10 @@ const modeLabels: Record<NotificationData['mode'], string> = {
 
 const maps: Record<string, Record<string, string>> = {
   memberRemuneration: {zero:'Aportació al 0 %',ipc:'Compensació limitada segons IPC (màxim 3 % anual, a partir del segon any)',both:'Vol comparar les dues modalitats'},
+  loanRemuneration: {zero:'Préstec al 0 %',ipc:'Actualització vinculada a l’IPC',both:'Vol conéixer les dues modalitats'},
+  loanFlexibility: {fixed:'Calendari fix',early:'Devolució anticipada sense penalització',small:'Xicotetes variacions sense canviar data final',flexible:'Devolució flexible dins del termini',discuss:'Vol parlar-ne'},
+  memberPriority: {short:'Necessita un termini curt',medium:'Pot acceptar un termini intermedi',long:'Pot acceptar una permanència llarga',explain:'Vol explicar-ho'},
+  needStart: {'2months':'Després de 2 mesos','1year':'Després d’un any',later:'Pot esperar més',unsure:'No ho sap'},
   loanYears: {'1':'1 any','2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència',discuss:'Vol parlar-ne'},
   memberYears: {'2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència'},
   preferredYears: {'1':'1 any','2':'2 anys','3':'3 anys','5':'5 anys','7':'7 anys','10':'10 anys',none:'Sense preferència'},
@@ -40,27 +45,48 @@ const oneLine = (s: string) => s.replace(/[\r\n\t]+/g, ' ').trim();
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
 export function createNotification(data: NotificationData): { subject: string; text: string; html: string } {
-  const termKey = data.mode === 'loan' ? 'loanYears' : data.mode === 'member' ? 'memberYears' : 'preferredYears';
-  const grace = data.mode === 'loan' ? field(data.preferences, 'loanGrace') : data.mode === 'undecided' ? field(data.preferences, 'preferredGrace') : 'No aplicable';
-  const frequencyKey = data.mode === 'loan' ? 'loanFrequency' : data.mode === 'member' ? 'memberFrequency' : 'preferredFrequency';
   const date = new Intl.DateTimeFormat('ca-ES', {
     timeZone: 'Europe/Madrid', dateStyle: 'short', timeStyle: 'medium'
   }).format(new Date(data.createdAt));
+
+  // Mostrar totes les preferències específiques de la modalitat, no només un resum.
+  const preferenceFields: Record<NotificationData['mode'], Array<[string, string]>> = {
+    loan: [
+      ['Modalitat preferida', 'loanRemuneration'],
+      ['Termini preferit de recuperació del préstec', 'loanYears'],
+      ['Periodicitat preferida', 'loanFrequency'],
+      ['Carència inicial voluntària', 'loanGrace'],
+      ['Flexibilitat acceptada', 'loanFlexibility'],
+    ],
+    member: [
+      ['Modalitat econòmica de persona associada', 'memberRemuneration'],
+      ['Termini preferit de recuperació', 'memberYears'],
+      ['Preferència de reembossament', 'memberFrequency'],
+      ['Necessites prioritat?', 'memberPriority'],
+    ],
+    undecided: [
+      ['Quan necessita començar a recuperar els diners', 'needStart'],
+      ['Termini preferit de devolució', 'preferredYears'],
+      ['Carència voluntària acceptable', 'preferredGrace'],
+      ['Periodicitat preferida', 'preferredFrequency'],
+    ],
+  };
+
+  // L'ordre de l'avís replica el formulari: identificació, dades comunes,
+  // preguntes de la modalitat seleccionada, comentaris i consentiment.
   const lines = [
     'Nova sol·licitud de finançament — La Dissident',
     '',
     `Codi de sol·licitud: ${data.code}`,
     `Data i hora (peninsular): ${date}`,
     `Modalitat: ${modeLabels[data.mode]}`,
-    ...(data.mode === 'member' ? [`Modalitat econòmica de persona associada: ${field(data.preferences, 'memberRemuneration')}`] : []),
     `Nom i cognoms: ${oneLine(data.fullName)}`,
-    `Correu: ${oneLine(data.email)}`,
+    `Correu electrònic: ${oneLine(data.email)}`,
     `Telèfon: ${oneLine(clean(data.phone))}`,
+    `Província o localitat: ${oneLine(clean(data.locality))}`,
+    `Idioma preferit: ${data.language === 'ca' ? 'Valencià' : 'Castellà'}`,
     `Quantitat aproximada: ${new Intl.NumberFormat('ca-ES').format(data.amount)} €`,
-    `Termini preferit: ${field(data.preferences, termKey)}`,
-    `Carència acceptada: ${grace}`,
-    `Periodicitat: ${field(data.preferences, frequencyKey)}`,
-    `Idioma: ${data.language === 'ca' ? 'Valencià' : 'Castellà'}`,
+    ...preferenceFields[data.mode].map(([label, key]) => `${label}: ${field(data.preferences, key)}`),
     `Comentaris: ${clean(data.comment)}`,
     `Consentiment per rebre novetats: ${data.newsletter ? 'Sí' : 'No'}`
   ];

@@ -52,7 +52,7 @@ export async function onRequestPost({request,env}:Context):Promise<Response>{
     // El codi de la petició només es genera una vegada i no es duplica el registre.
     if (env.RESEND_API_KEY) {
       const result = await sendFinancingNotification(env.RESEND_API_KEY, {
-        id, code, createdAt, mode, fullName, email, phone: phone || null,
+        id, code, createdAt, mode, fullName, email, phone: phone || null, locality: locality || null,
         amount, preferences: prefs, language: lang!, comment: comment || null, newsletter,
       });
       // Si falla l'actualització d'estat, no invalidem la sol·licitud ja registrada.
