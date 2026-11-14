@@ -823,10 +823,6 @@ html {scroll-padding-top:100px}
     max-height: none;
   }
 
-  .site-footer .footer-brand img {
-    width: 120px;
-    height: auto;
-  }
 }
 
 /* Títol principal un poc més menut */
@@ -854,25 +850,3 @@ html {scroll-padding-top:100px}
   }
 }
 
-/* Centrar el logotip del footer en mòbil */
-@media (max-width: 650px) {
-  .site-footer .footer-brand {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-self: center;
-    text-align: center;
-  }
-
-  .site-footer .footer-brand a {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .site-footer .footer-brand img {
-    display: block;
-    margin: 0 auto;
-  }
-}
