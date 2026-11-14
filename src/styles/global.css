@@ -227,6 +227,18 @@ html {scroll-padding-top:100px}
   gap: 24px;
 }
 
+.footer-brand {
+  justify-self: center;
+  text-align: center;
+}
+
+.footer-brand img {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* Correu a l'esquerra */
 .footer-email {
   justify-self: start;
@@ -239,7 +251,7 @@ html {scroll-padding-top:100px}
 
 .footer-brand img {
   display: block;
-  width: 170px;
+  width: 120px;
   height: auto;
 }
 
@@ -268,7 +280,7 @@ html {scroll-padding-top:100px}
   }
 
   .footer-brand img {
-    width: 150px;
+    width: 110px;
   }
 
   .footer-legal {
@@ -810,10 +822,7 @@ html {scroll-padding-top:100px}
   max-height: none;
 }
 
-.site-footer .footer-brand img {
-  width: 195px;
-  height: auto;
-}
+
 
 /* Logotip més gran en mòbil */
 @media (max-width: 650px) {
